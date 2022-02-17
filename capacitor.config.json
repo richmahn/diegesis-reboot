@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "diegesis-reboot",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
