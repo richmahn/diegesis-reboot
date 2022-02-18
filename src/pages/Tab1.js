@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonText, IonTitle, IonToolbar,} from '@ionic/react';
+import {IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToolbar,} from '@ionic/react';
 
 import {useQuery} from 'proskomma-react-hooks';
 
@@ -56,12 +56,16 @@ export default function Tab1({pkState, isLoaded}) {
                 <IonGrid>
                     <IonRow>
                         <IonCol>
-                            <IonTitle size="large">{isLoaded ? "Loaded" : "Not Loaded"} {JSON.stringify(result)}</IonTitle>
-                            <IonText>
-                <span style={{whiteSpace: 'pre'}}>
-                  {dataStringified}
-                </span>
-                            </IonText>
+                            <IonTitle size="large">
+                                {isLoaded ? "Loaded" : "Not Loaded"} {JSON.stringify(result)}
+                            </IonTitle>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <span style={{whiteSpace: 'pre'}}>
+                                {dataStringified}
+                            </span>
                         </IonCol>
                     </IonRow>
                 </IonGrid>
@@ -80,5 +84,5 @@ Tab1.propTypes = {
         ).isRequired,
         verbose: PropTypes.bool,
     }),
-        isLoaded: PropTypes.bool,
+    isLoaded: PropTypes.bool,
 };
