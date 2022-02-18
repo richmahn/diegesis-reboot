@@ -16,7 +16,7 @@ export default function Tab1({pkState, isLoaded}) {
         verbose,
     } = pkState;
 
-    const tab1Query = '{ docSets { id  } }';
+    const tab1Query = '{ docSets { id } }';
 
     const {
         stateId: queryStateId,
@@ -32,7 +32,7 @@ export default function Tab1({pkState, isLoaded}) {
 
     useEffect(
         () => proskomma.gqlQuery(tab1Query).then(res => setResult(res)),
-        [proskomma]
+        [proskomma, isLoaded]
     );
 
     const dataStringified = JSON.stringify({
