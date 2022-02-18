@@ -47,7 +47,6 @@ const App = () => {
 
     useEffect( () => {
         const doFetch = async () => {
-            console.log("start")
             const axiosInstance = Axios.create({});
             axiosInstance.defaults.headers = {
                 'Cache-Control': 'no-cache',
