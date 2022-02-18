@@ -10,7 +10,7 @@ export default function Tab1({pkState, isLoaded}) {
     const [result, setResult] = useState({});
     const {
         stateId,
-        // newStateId,
+        newStateId,
         proskomma,
         errors: proskommaErrors,
         verbose,
@@ -31,7 +31,10 @@ export default function Tab1({pkState, isLoaded}) {
     });
 
     useEffect(
-        () => proskomma.gqlQuery(tab1Query).then(res => setResult(res)),
+        () => {
+            proskomma.gqlQuery(tab1Query).then(res => setResult(res));
+            newStateId();
+        },
         [proskomma, isLoaded]
     );
 
