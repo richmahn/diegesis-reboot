@@ -23,6 +23,7 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "ionicons": "^5.4.0",
+    "proskomma-react-hooks": "^1.4.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",
