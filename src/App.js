@@ -73,11 +73,12 @@ const App = () => {
                         const decodedText = new TextDecoder().decode(data);
                         pkState.proskomma.loadSuccinctDocSet(JSON.parse(decodedText));
                         setIsLoaded(true);
+                        pkState.newStateId();
                     }
                 );
         };
         doFetch();
-    }, [pkState.proskomma]);
+    }, [pkState]);
     return (
         <IonApp>
             <IonReactRouter>
