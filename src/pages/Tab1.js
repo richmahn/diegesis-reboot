@@ -16,7 +16,7 @@ export default function Tab1({pkState, isLoaded}) {
         verbose,
     } = pkState;
 
-    const tab1Query = '{ docSets { id } }';
+    const tab1Query = '{ id docSets { id } }';
 
     const {
         stateId: queryStateId,
@@ -56,9 +56,7 @@ export default function Tab1({pkState, isLoaded}) {
                 <IonGrid>
                     <IonRow>
                         <IonCol>
-                            <IonTitle size="large">
-                                {isLoaded ? "Loaded" : "Not Loaded"} {JSON.stringify(result)}
-                            </IonTitle>
+                            {isLoaded ? "Loaded" : "Not Loaded"} {JSON.stringify(result.data)}
                         </IonCol>
                     </IonRow>
                     <IonRow>
