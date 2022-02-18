@@ -1,22 +1,19 @@
-import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Redirect, Route} from 'react-router-dom';
+import Axios from 'axios';
 import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact,
+    IonApp,
+    IonIcon,
+    IonLabel,
+    IonRouterOutlet,
+    IonTabBar,
+    IonTabButton,
+    IonTabs,
+    setupIonicReact,
 } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import { useProskomma } from 'proskomma-react-hooks';
-import {
-  ellipse,
-  square,
-  triangle,
-} from 'ionicons/icons';
+import {IonReactRouter} from '@ionic/react-router';
+import {useProskomma} from 'proskomma-react-hooks';
+import {ellipse, square, triangle,} from 'ionicons/icons';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
@@ -45,44 +42,78 @@ setupIonicReact();
 const verbose = false;
 
 const App = () => {
-  const pkState = useProskomma({ verbose });
+    const pkState = useProskomma({verbose});
+    const [isLoaded, setIsLoaded] = useState(false);
 
-  return (
-    <IonApp>
-      <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route exact path="/tab1">
-              <Tab1 pkState={pkState} />
-            </Route>
-            <Route exact path="/tab2">
-              <Tab2 pkState={pkState} />
-            </Route>
-            <Route path="/tab3">
-              <Tab3 pkState={pkState} />
-            </Route>
-            <Route exact path="/">
-              <Redirect to="/tab1" />
-            </Route>
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="tab1" href="/tab1">
-              <IonIcon icon={triangle} />
-              <IonLabel>Tab 1</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="tab2" href="/tab2">
-              <IonIcon icon={ellipse} />
-              <IonLabel>Tab 2</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="tab3" href="/tab3">
-              <IonIcon icon={square} />
-              <IonLabel>Tab 3</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      </IonReactRouter>
-    </IonApp>
-  );
+    useEffect( () => {
+        const doFetch = async () => {
+            console.log("start")
+            const axiosInstance = Axios.create({});
+            axiosInstance.defaults.headers = {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+            };
+            await axiosInstance.request(
+                {
+                    method: "get",
+                    responseType: 'arraybuffer',
+                    "url": `http://localhost:8099/https://diegesis/cb_eng_cblft_serialized.json`,
+                    "validateStatus": false,
+                }
+            )
+                .then(
+                    async response => {
+                        const data = response.data;
+                        if (response.status !== 200) {
+                            console.log(`Request returned status code ${response.status}`);
+                            console.log(String.fromCharCode.apply(null, new Uint8Array(data)));
+                            return;
+                        }
+                        const decodedText = new TextDecoder().decode(data);
+                        pkState.proskomma.loadSuccinctDocSet(JSON.parse(decodedText));
+                        setIsLoaded(true);
+                    }
+                );
+        };
+        doFetch();
+    }, [pkState.proskomma]);
+    return (
+        <IonApp>
+            <IonReactRouter>
+                <IonTabs>
+                    <IonRouterOutlet>
+                        <Route exact path="/tab1">
+                            <Tab1 pkState={ pkState } isLoaded={ isLoaded } />
+                        </Route>
+                        <Route exact path="/tab2">
+                            <Tab2 pkState={ pkState } />
+                        </Route>
+                        <Route path="/tab3">
+                            <Tab3 pkState={ pkState } />
+                        </Route>
+                        <Route exact path="/">
+                            <Redirect to="/tab1" />
+                        </Route>
+                    </IonRouterOutlet>
+                    <IonTabBar slot="bottom">
+                        <IonTabButton tab="tab1" href="/tab1">
+                            <IonIcon icon={ triangle } />
+                            <IonLabel>Tab 1</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton tab="tab2" href="/tab2">
+                            <IonIcon icon={ ellipse } />
+                            <IonLabel>Tab 2</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton tab="tab3" href="/tab3">
+                            <IonIcon icon={ square } />
+                            <IonLabel>Tab 3</IonLabel>
+                        </IonTabButton>
+                    </IonTabBar>
+                </IonTabs>
+            </IonReactRouter>
+        </IonApp>
+    );
 };
 
 export default App;

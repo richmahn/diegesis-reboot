@@ -72,7 +72,7 @@ export default function Tab3({ pkState }) {
       </IonContent>
     </IonPage>
   );
-};
+}
 
 Tab3.propTypes = {
   pkState: PropTypes.shape({
