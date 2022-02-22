@@ -10,7 +10,7 @@ export default function Tab1({pkState, isLoaded}) {
 
     useEffect(
         () => {
-            const tab1Query = '{ id nDocSets }';
+            const tab1Query = '{ docSets { id documents { book: header(id:"bookCode") title: header(id:"toc") } } }';
             pkState.proskomma.gqlQuery(tab1Query).then(res => setResult(res));
         },
         [pkState.proskomma, isLoaded]
@@ -39,14 +39,19 @@ export default function Tab1({pkState, isLoaded}) {
                                     "No Data"
                             }</IonCol>
                     </IonRow>
-                    <IonRow>
-                        <IonCol>{
-                                result.errors ?
-                                    <pre>{JSON.stringify(result.errors, null, 2)}</pre> :
-                                    "No Errors"
-                            }</IonCol>
-                    </IonRow>
-                </IonGrid>
+                    {
+                        result.errors && <>
+                            <IonRow>
+                                <IonCol><IonTitle>Errors</IonTitle></IonCol>
+                            </IonRow>
+                            <IonRow>
+                                <IonCol><ul>{result.errors.map(
+                                    (e, n) => <li key={n}>{e.message}</li>
+                                )}</ul></IonCol>
+                            </IonRow>
+                            </>
+                    }
+                 </IonGrid>
             </IonContent>
         </IonPage>
     );
