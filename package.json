@@ -17,7 +17,7 @@
     "@types/react-router-dom": "^5.1.7",
     "axios": "^0.26.0",
     "ionicons": "^5.4.0",
-    "proskomma-react-hooks": "^1.4.1",
+    "proskomma-react-hooks": "^1.4.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",
