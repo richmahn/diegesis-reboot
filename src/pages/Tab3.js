@@ -9,8 +9,8 @@ export default function Tab3({pkState, isLoaded}) {
 
     useEffect(
         () => {
-            const tab1Query = '{ docSets { id documents { book: header(id:"bookCode") title: header(id:"toc") } } }';
-            pkState.proskomma.gqlQuery(tab1Query).then(res => setResult(res));
+            const tab3Query = '{ docSet(id:"xyz-spa_rv09") { id document(bookCode:"GAL") { cv(chapterVerses:"5:1") { text items {type subType payload} } } } }';
+            pkState.proskomma.gqlQuery(tab3Query).then(res => setResult(res));
         },
         [isLoaded]
     );
@@ -19,7 +19,7 @@ export default function Tab3({pkState, isLoaded}) {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Tab 1</IonTitle>
+                    <IonTitle>Tab 3</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>

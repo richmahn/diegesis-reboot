@@ -9,8 +9,8 @@ export default function Tab2({pkState, isLoaded}) {
 
     useEffect(
         () => {
-            const tab1Query = '{ docSet(id:"xyz-spa_rv09") { id document(bookCode:"GAL") { mainBlocks { text } } } }';
-            pkState.proskomma.gqlQuery(tab1Query).then(res => setResult(res));
+            const tab2Query = '{ docSet(id:"xyz-spa_rv09") { id document(bookCode:"GAL") { mainBlocks { text } } } }';
+            pkState.proskomma.gqlQuery(tab2Query).then(res => setResult(res));
         },
         [isLoaded]
     );
@@ -19,7 +19,7 @@ export default function Tab2({pkState, isLoaded}) {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Tab 1</IonTitle>
+                    <IonTitle>Tab 2</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>

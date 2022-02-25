@@ -85,10 +85,10 @@ const App = () => {
                             <Tab1 pkState={ pkState } isLoaded={ isLoaded } />
                         </Route>
                         <Route exact path="/tab2">
-                            <Tab2 pkState={ pkState } />
+                            <Tab2 pkState={ pkState } isLoaded={ isLoaded } />
                         </Route>
                         <Route path="/tab3">
-                            <Tab3 pkState={ pkState } />
+                            <Tab3 pkState={ pkState } isLoaded={ isLoaded } />
                         </Route>
                         <Route exact path="/">
                             <Redirect to="/tab1" />
