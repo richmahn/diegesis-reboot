@@ -1,87 +1,62 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonText,
-} from '@ionic/react';
+import React, {useEffect, useState} from 'react';
+import {IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToolbar,} from '@ionic/react';
 
-import { useQuery } from 'proskomma-react-hooks';
+import './Tab1.css';
+import PropTypes from "prop-types";
 
-import './Tab3.css';
+export default function Tab3({pkState, isLoaded}) {
+    const [result, setResult] = useState({});
 
-export default function Tab3({ pkState }) {
-  const {
-    stateId,
-    // newStateId,
-    proskomma,
-    errors: proskommaErrors,
-    verbose,
-  } = pkState;
+    useEffect(
+        () => {
+            const tab1Query = '{ docSets { id documents { book: header(id:"bookCode") title: header(id:"toc") } } }';
+            pkState.proskomma.gqlQuery(tab1Query).then(res => setResult(res));
+        },
+        [isLoaded]
+    );
 
-  const query = '{ id }';
-
-  const {
-    stateId: queryStateId,
-    query: queryRun,
-    data,
-    errors: queryErrors,
-  } = useQuery({
-    proskomma,
-    stateId,
-    query,
-    verbose,
-  });
-
-  const dataStringified = JSON.stringify({
-    stateId,
-    queryStateId,
-    query,
-    queryRun,
-    proskommaErrors,
-    queryErrors,
-    data,
-  }, null, 2);
-
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonGrid>
-          <IonRow>
-            <IonCol>
-              <IonTitle size="large">Tab 3 : pId: {proskomma.processorId}, stateId: {queryStateId} </IonTitle>
-              <IonText>
-                <span style={{ whiteSpace: 'pre' }}>
-                  {dataStringified}
-                </span>
-              </IonText>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonContent>
-    </IonPage>
-  );
+    return (
+        <IonPage>
+            <IonHeader>
+                <IonToolbar>
+                    <IonTitle>Tab 1</IonTitle>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent fullscreen>
+                <IonGrid>
+                    <IonRow>
+                        <IonCol>{
+                                isLoaded ?
+                                    'Loaded' :
+                                    'Not Loaded'
+                            }</IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>{
+                                result.data ?
+                                    <pre>{JSON.stringify(result.data, null, 2)}</pre> :
+                                    "No Data"
+                            }</IonCol>
+                    </IonRow>
+                    {
+                        result.errors && <>
+                            <IonRow>
+                                <IonCol><IonTitle>Errors</IonTitle></IonCol>
+                            </IonRow>
+                            <IonRow>
+                                <IonCol><ul>{result.errors.map(
+                                    (e, n) => <li key={n}>{e.message}</li>
+                                )}</ul></IonCol>
+                            </IonRow>
+                            </>
+                    }
+                 </IonGrid>
+            </IonContent>
+        </IonPage>
+    );
 }
 
 Tab3.propTypes = {
-  pkState: PropTypes.shape({
-    stateId: PropTypes.string.isRequired,
-    newStateId: PropTypes.func.isRequired,
-    proskomma: PropTypes.object.isRequired,
-    errors: PropTypes.arrayOf(
-      PropTypes.string,
-    ).isRequired,
-    verbose: PropTypes.bool,
-  }),
+    pkState: PropTypes.object,
+    isLoaded: PropTypes.bool,
 };

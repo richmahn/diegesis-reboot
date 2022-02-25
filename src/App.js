@@ -13,6 +13,7 @@ import {
 } from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import {useProskomma} from 'proskomma-react-hooks';
+import {thaw} from 'proskomma-freeze';
 import {ellipse, square, triangle,} from 'ionicons/icons';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
@@ -39,9 +40,8 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-const verbose = false;
-
 const App = () => {
+    const verbose = true;
     const pkState = useProskomma({verbose});
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -56,8 +56,8 @@ const App = () => {
             await axiosInstance.request(
                 {
                     method: "get",
-                    responseType: 'arraybuffer',
-                    "url": `http://localhost:8099/https://diegesis/cb_eng_cblft_serialized.json`,
+                    responseType: 'text',
+                    "url": `http://localhost:8088/archives/spa_archive.pkzip`,
                     "validateStatus": false,
                 }
             )
@@ -66,18 +66,16 @@ const App = () => {
                         const data = response.data;
                         if (response.status !== 200) {
                             console.log(`Request returned status code ${response.status}`);
-                            console.log(String.fromCharCode.apply(null, new Uint8Array(data)));
+                            console.log(data);
                             return;
                         }
-                        const decodedText = new TextDecoder().decode(data);
-                        pkState.proskomma.loadSuccinctDocSet(JSON.parse(decodedText));
+                        await thaw(pkState.proskomma, data);
                         setIsLoaded(true);
-                        pkState.newStateId();
                     }
                 );
         };
         doFetch();
-    }, [pkState]);
+    }, []);
     return (
         <IonApp>
             <IonReactRouter>
