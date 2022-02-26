@@ -48,6 +48,7 @@ const App = () => {
     useEffect( () => {
         doFetch(pkState.proskomma, setIsLoaded);
     }, [pkState.proskomma]);
+
     return (
         <IonApp>
             <IonReactRouter>
