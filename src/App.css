@@ -1,0 +1,17 @@
+.error {
+    color: #A00
+}
+
+.isLoaded {
+    padding: 5px;
+    text-align: center;
+    background-color: #AFA;
+    color: #000
+}
+
+.isNotLoaded {
+    padding: 5px;
+    text-align: center;
+    background-color: #777;
+    color: #FFF
+}
