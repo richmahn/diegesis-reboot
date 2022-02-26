@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+// import { useDeepCompareEffect } from 'use-deep-compare';
 import {Redirect, Route} from 'react-router-dom';
 import {
     IonApp,
@@ -18,6 +19,7 @@ import Tab2 from './pages/Tab2/Tab2';
 import Tab3 from './pages/Tab3/Tab3';
 import doFetch from "./lib/doFetch";
 import './App.css';
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -45,9 +47,14 @@ const App = () => {
     const pkState = useProskomma({verbose});
     const [isLoaded, setIsLoaded] = useState(false);
 
+    const onLoaded = useCallback((value) => {
+        setIsLoaded(value);
+        pkState.newStateId();
+    }, []);
+
     useEffect( () => {
-        doFetch(pkState.proskomma, setIsLoaded);
-    }, [pkState.proskomma]);
+        doFetch(pkState.proskomma, onLoaded);
+    }, []);
 
     return (
         <IonApp>
