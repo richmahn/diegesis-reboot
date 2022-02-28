@@ -12,8 +12,10 @@ import {
 } from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import {useProskomma} from 'proskomma-react-hooks';
-import {square} from 'ionicons/icons';
-import Tab3 from './pages/Tab3/Tab3';
+import {triangle, ellipse, square} from 'ionicons/icons';
+import Versions from './pages/Versions/Versions';
+import BrowseBook from './pages/BrowseBook/BrowseBook';
+import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
 import doFetch from "./lib/doFetch";
 import './App.css';
 
@@ -48,7 +50,7 @@ const App = () => {
     }, []);
 
     useEffect( () => {
-        doFetch(pkState.proskomma, onLoaded);
+        doFetch(pkState, onLoaded);
     }, []);
 
     return (
@@ -56,17 +58,31 @@ const App = () => {
             <IonReactRouter>
                 <IonTabs>
                     <IonRouterOutlet>
-                        <Route path="/tab3">
-                            <Tab3 pkState={ pkState } />
+                        <Route path="/versions">
+                            <Versions pkState={ pkState } />
+                        </Route>
+                        <Route path="/browseBook">
+                            <BrowseBook pkState={ pkState } />
+                        </Route>
+                        <Route path="/browseChapter">
+                            <BrowseChapter pkState={ pkState } />
                         </Route>
                         <Route exact path="/">
-                            <Redirect to="/tab3" />
+                            <Redirect to="/versions" />
                         </Route>
                     </IonRouterOutlet>
                     <IonTabBar slot="bottom">
-                        <IonTabButton tab="tab3" href="/tab3" data-test-id='tab-bar-button-tab3'>
+                        <IonTabButton tab="versions" href="/versions" data-test-id='tab-bar-button-tab3'>
+                            <IonIcon icon={ triangle } />
+                            <IonLabel>Versions</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton tab="browseBook" href="/browseBook" data-test-id='tab-bar-button-tab3'>
                             <IonIcon icon={ square } />
-                            <IonLabel>Tab 3</IonLabel>
+                            <IonLabel>Book</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton tab="browseChapter" href="/browseChapter" data-test-id='tab-bar-button-tab3'>
+                            <IonIcon icon={ ellipse } />
+                            <IonLabel>Chapter</IonLabel>
                         </IonTabButton>
                     </IonTabBar>
                 </IonTabs>
