@@ -12,7 +12,7 @@ import {
 } from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import {useProskomma} from 'proskomma-react-hooks';
-import {albumsOutline, ellipse, book, diamond, search} from 'ionicons/icons';
+import {albumsOutline, readerOutline, book, diamond, search} from 'ionicons/icons';
 import Versions from './pages/Versions/Versions';
 import BrowseBook from './pages/BrowseBook/BrowseBook';
 import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
@@ -89,7 +89,7 @@ const App = () => {
                             <IonLabel>Book</IonLabel>
                         </IonTabButton>
                         <IonTabButton tab="browseChapter" href="/browseChapter" data-test-id='tab-bar-button-tab3'>
-                            <IonIcon icon={ ellipse } />
+                            <IonIcon icon={ readerOutline } />
                             <IonLabel>Chapter</IonLabel>
                         </IonTabButton>
                         <IonTabButton tab="browseVerse" href="/browseVerse" data-test-id='tab-bar-button-tab3'>
