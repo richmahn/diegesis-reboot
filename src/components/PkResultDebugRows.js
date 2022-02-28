@@ -14,7 +14,7 @@ export default function PkResultDebugRows({result}) {
             }</IonCol>
         </IonRow>
         {
-            result.errors &&
+            result.errors && (result.errors.length > 0) &&
             <IonRow>
                 <IonCol>
                     <PkErrors errors={result.errors} />

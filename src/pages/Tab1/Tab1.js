@@ -6,9 +6,8 @@ import PropTypes from "prop-types";
 import doQuery from '../../lib/doQuery';
 import PageHeader from '../../components/PageHeader';
 import PkResultDebugRows from "../../components/PkResultDebugRows";
-import LoadStatusRow from "../../components/LoadStatusRow";
 
-export default function Tab1({pkState, isLoaded}) {
+export default function Tab1({pkState}) {
     const [result, setResult] = useState({});
 
     useEffect(
@@ -28,7 +27,7 @@ export default function Tab1({pkState, isLoaded}) {
                 )
             );
         },
-        [isLoaded, pkState.proskomma]
+        [pkState.proskomma]
     );
 
     return (
@@ -36,7 +35,6 @@ export default function Tab1({pkState, isLoaded}) {
             <PageHeader title="Tab 1" />
             <IonContent fullscreen>
                 <IonGrid>
-                    <LoadStatusRow status={isLoaded} />
                     <PkResultDebugRows result={result} />
                  </IonGrid>
             </IonContent>

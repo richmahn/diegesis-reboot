@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
-// import { useDeepCompareEffect } from 'use-deep-compare';
+import React, { useEffect, useCallback } from 'react';
 import {Redirect, Route} from 'react-router-dom';
 import {
     IonApp,
@@ -13,9 +12,7 @@ import {
 } from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import {useProskomma} from 'proskomma-react-hooks';
-import {ellipse, square, triangle,} from 'ionicons/icons';
-import Tab1 from './pages/Tab1/Tab1';
-import Tab2 from './pages/Tab2/Tab2';
+import {square} from 'ionicons/icons';
 import Tab3 from './pages/Tab3/Tab3';
 import doFetch from "./lib/doFetch";
 import './App.css';
@@ -45,10 +42,8 @@ setupIonicReact();
 const App = () => {
     const verbose = true;
     const pkState = useProskomma({verbose});
-    const [isLoaded, setIsLoaded] = useState(false);
 
-    const onLoaded = useCallback((value) => {
-        setIsLoaded(value);
+    const onLoaded = useCallback(() => {
         pkState.newStateId();
     }, []);
 
@@ -61,28 +56,14 @@ const App = () => {
             <IonReactRouter>
                 <IonTabs>
                     <IonRouterOutlet>
-                        <Route exact path="/tab1">
-                            <Tab1 pkState={ pkState } isLoaded={ isLoaded } />
-                        </Route>
-                        <Route exact path="/tab2">
-                            <Tab2 pkState={ pkState } isLoaded={ isLoaded } />
-                        </Route>
                         <Route path="/tab3">
-                            <Tab3 pkState={ pkState } isLoaded={ isLoaded } />
+                            <Tab3 pkState={ pkState } />
                         </Route>
                         <Route exact path="/">
-                            <Redirect to="/tab1" />
+                            <Redirect to="/tab3" />
                         </Route>
                     </IonRouterOutlet>
                     <IonTabBar slot="bottom">
-                        <IonTabButton tab="tab1" href="/tab1" data-test-id='tab-bar-button-tab1'>
-                            <IonIcon icon={ triangle } />
-                            <IonLabel>Tab 1</IonLabel>
-                        </IonTabButton>
-                        <IonTabButton tab="tab2" href="/tab2" data-test-id='tab-bar-button-tab2'>
-                            <IonIcon icon={ ellipse } />
-                            <IonLabel>Tab 2</IonLabel>
-                        </IonTabButton>
                         <IonTabButton tab="tab3" href="/tab3" data-test-id='tab-bar-button-tab3'>
                             <IonIcon icon={ square } />
                             <IonLabel>Tab 3</IonLabel>

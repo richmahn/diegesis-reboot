@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import ReactJson from "react-json-view";
 
 export default function PkDataAsJson({data}) {
-    return <pre>{JSON.stringify(data, null, 2)}</pre>
+    return <ReactJson src={data} theme="monokai" style={{ maxHeight: '500px', overflow: 'scroll', whiteSpace: 'pre' }} />
+
 }
 
 PkDataAsJson.propTypes = {

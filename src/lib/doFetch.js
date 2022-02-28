@@ -1,7 +1,8 @@
 import Axios from "axios";
 import {thaw} from "proskomma-freeze";
 
-export default async function doFetch(pk, setIsLoaded) {
+export default async function doFetch(pk) {
+    console.log("Start doFetch");
     const axiosInstance = Axios.create({});
     axiosInstance.defaults.headers = {
         'Cache-Control': 'no-cache',
@@ -25,7 +26,7 @@ export default async function doFetch(pk, setIsLoaded) {
                     return;
                 }
                 await thaw(pk, data);
-                setIsLoaded(true);
+                console.log("End doFetch");
             }
         );
 }
