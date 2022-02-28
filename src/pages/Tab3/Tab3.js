@@ -10,7 +10,7 @@ import PkResultDebugRows from "../../components/PkResultDebugRows";
 import './Tab3.css';
 
 export default function Tab3({pkState}) {
-    console.log("Rendering Tab3");
+
     const verbose = true;
 
 /*
