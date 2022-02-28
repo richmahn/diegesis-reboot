@@ -24,7 +24,7 @@ export default function BrowseBook({pkState}) {
             <StubPageContent
                 pkState={pkState}
                 query={query}
-                description="View all the content of a book"
+                description="View all the content of a book. The current query displays plain text for one paragraph at a time."
             />
         </IonPage>
     );

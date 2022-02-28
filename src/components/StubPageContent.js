@@ -18,7 +18,7 @@ export default function StubPageContent({pkState, query, description}) {
         <IonGrid>
             <IonRow>
                 <IonCol>
-                    <IonTitle>{description || 'No Description'}</IonTitle>
+                    <IonTitle size="small">{description || 'No Description'}</IonTitle>
                 </IonCol>
             </IonRow>
             <PkResultDebugRows result={queryState} />

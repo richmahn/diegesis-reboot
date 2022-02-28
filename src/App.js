@@ -12,10 +12,12 @@ import {
 } from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import {useProskomma} from 'proskomma-react-hooks';
-import {triangle, ellipse, square} from 'ionicons/icons';
+import {triangle, ellipse, square, diamond, search} from 'ionicons/icons';
 import Versions from './pages/Versions/Versions';
 import BrowseBook from './pages/BrowseBook/BrowseBook';
 import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
+import BrowseVerse from './pages/BrowseVerse/BrowseVerse';
+import Search from './pages/Search/Search';
 import doFetch from "./lib/doFetch";
 import './App.css';
 
@@ -67,6 +69,12 @@ const App = () => {
                         <Route path="/browseChapter">
                             <BrowseChapter pkState={ pkState } />
                         </Route>
+                        <Route path="/browseVerse">
+                            <BrowseVerse pkState={ pkState } />
+                        </Route>
+                        <Route path="/search">
+                            <Search pkState={ pkState } />
+                        </Route>
                         <Route exact path="/">
                             <Redirect to="/versions" />
                         </Route>
@@ -83,6 +91,14 @@ const App = () => {
                         <IonTabButton tab="browseChapter" href="/browseChapter" data-test-id='tab-bar-button-tab3'>
                             <IonIcon icon={ ellipse } />
                             <IonLabel>Chapter</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton tab="browseVerse" href="/browseVerse" data-test-id='tab-bar-button-tab3'>
+                            <IonIcon icon={ diamond } />
+                            <IonLabel>Verse</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton tab="search" href="/search" data-test-id='tab-bar-button-tab3'>
+                            <IonIcon icon={ search } />
+                            <IonLabel>Search</IonLabel>
                         </IonTabButton>
                     </IonTabBar>
                 </IonTabs>

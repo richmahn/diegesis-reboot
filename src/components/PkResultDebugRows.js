@@ -1,4 +1,4 @@
-import {IonCol, IonRow} from "@ionic/react";
+import {IonCol, IonRow, IonTitle} from "@ionic/react";
 import PkDataAsJson from "./PkDataAsJson";
 import PkErrors from "./PkErrors";
 import React from "react";
@@ -10,7 +10,7 @@ export default function PkResultDebugRows({result}) {
             <IonCol>{
                 result.data ?
                     <PkDataAsJson data={result.data} /> :
-                    "No Data"
+                    <IonTitle size="small">No Data</IonTitle>
             }</IonCol>
         </IonRow>
         {

@@ -10,6 +10,10 @@ export default function Versions({pkState}) {
     const query = '{' +
         '  docSets {' +
         '    id' +
+        '    selectors {' +
+        '      key' +
+        '      value' +
+        '    }' +
         '    documents {' +
         '      id' +
         '      book: header(id:"bookCode")' +
@@ -19,11 +23,11 @@ export default function Versions({pkState}) {
         '}';
 
     return <IonPage>
-        <PageHeader title="Versions" />
+        <PageHeader title="List Versions" />
         <StubPageContent
             pkState={pkState}
             query={query}
-            description="Catalog of DocSets and Documents"
+            description="Catalog of DocSets and Documents. It will be possible to pick a Bible version and a book from here"
         />
     </IonPage>
 }

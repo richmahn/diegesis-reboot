@@ -7,7 +7,7 @@ export default function PkDataAsJson({data}) {
     return <IonGrid>
         <IonRow>
             <IonCol>
-                <IonTitle>Data</IonTitle>
+                <IonTitle size="small">Data</IonTitle>
             </IonCol>
         </IonRow>
         <IonRow>

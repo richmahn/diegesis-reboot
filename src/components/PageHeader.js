@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 export default function PageHeader({title}) {
     return <IonHeader>
         <IonToolbar>
-            <IonTitle>{title}</IonTitle>
+            <IonTitle size="large">{title}</IonTitle>
         </IonToolbar>
     </IonHeader>
 }
