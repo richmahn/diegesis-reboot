@@ -1,34 +1,42 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import {IonPage} from '@ionic/react';
+import {useCatalog} from 'proskomma-react-hooks';
+import {IonCol, IonContent, IonGrid, IonPage, IonRow} from '@ionic/react';
 import PageHeader from "../../components/PageHeader";
-import StubPageContent from "../../components/StubPageContent";
+import PkDataAsJson from "../../components/PkDataAsJson";
+import PkErrors from "../../components/PkErrors";
 import './Versions.css';
 
 export default function Versions({pkState}) {
 
-    const query = '{' +
-        '  docSets {' +
-        '    id' +
-        '    selectors {' +
-        '      key' +
-        '      value' +
-        '    }' +
-        '    documents {' +
-        '      id' +
-        '      book: header(id:"bookCode")' +
-        '      title: header(id:"toc")' +
-        '    }' +
-        '  }' +
-        '}';
+    const {
+        catalog,
+        errors: catalogErrors,
+    } = useCatalog({
+        proskomma: pkState.proskomma,
+        stateId: pkState.stateId,
+        verbose: true,
+    });
+
 
     return <IonPage>
         <PageHeader title="List Versions" />
-        <StubPageContent
-            pkState={pkState}
-            query={query}
-            description="Catalog of DocSets and Documents. It will be possible to pick a Bible version and a book from here"
-        />
+        <IonContent fullscreen>
+            <IonGrid>
+                <IonRow>
+                    <IonCol>
+                        <PkDataAsJson data={catalog} />
+                    </IonCol>
+                </IonRow>
+                {
+                    catalogErrors && catalogErrors.length > 0 && <IonRow>
+                        <IonCol>
+                            <PkErrors errors={catalogErrors} />
+                        </IonCol>
+                    </IonRow>
+                }
+            </IonGrid>
+        </IonContent>
     </IonPage>
 }
 
