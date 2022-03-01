@@ -40,7 +40,7 @@ export default function BrowseChapter({pkState}) {
     const renderParagraphContents = b => b.items.map((b, n) => {
         if (b.type === 'token')
         {
-            return <span key={n}>{b.payload}</span>;
+            return <span className={'c' + n}>{b.payload}</span>;
         }
         else if (b.type === 'scope' && b.subType === 'start' && b.payload.startsWith('verse/'))
         {
