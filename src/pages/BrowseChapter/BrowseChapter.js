@@ -1,33 +1,67 @@
 import React from 'react';
+import {useQuery} from "proskomma-react-hooks";
 import PropTypes from "prop-types";
-import {IonPage} from '@ionic/react';
+import {IonCol, IonContent, IonGrid, IonPage, IonRow} from '@ionic/react';
 import PageHeader from "../../components/PageHeader";
-import StubPageContent from "../../components/StubPageContent";
 
 import './BrowseChapter.css';
 
 export default function BrowseChapter({pkState}) {
 
     const query = '{' +
-    '  docSet(id:"xyz-spa_rv09") {' +
+    '  docSet(id:"xyz-eng_webbe") {' +
     '    id' +
-    '    document(bookCode:"GAL") {' +
-    '      id' +
-    '      cv(chapter:"5") {' +
-    '        text' +
+    '    document(bookCode:"MAT") {' +
+    '      mainSequence {' +
+    '        blocks(withScriptureCV:"6") {' +
+    '           scopeLabels(startsWith:["blockTag"])' +
+    '            items{type subType payload}' +
+    '       }' +
     '      }' +
     '    }' +
     '  }' +
     '}';
 
+    const verbose=true;
+
+   // <IonCol>
+   // {JSON.stringify(queryState)}
+   //</IonCol>
+    // {queryState.data.docSet.document.cv.tokens.map((t, n) => [<span key={n}>{t.payload}</span>,' '])} //tokens{payload} // {JSON.stringify(queryState)}
+
+    const queryState = useQuery({
+        ...pkState,
+        query,
+        verbose,
+    });
+
+    //console.log(queryState.data);
+
+    const renderBlock = b => b.items.map((b, n) => {
+        if (b.type === 'token')
+        {
+            return <span key={n}>{b.payload}</span>;
+        }
+        else if (b.type === 'scope' && b.subType === 'start' && b.payload.startsWith('verse/'))
+        {
+            return <span className='verse' key={n}>{b.payload.split('/')[1]}</span>;
+        }
+    }
+    );
+
+
     return (
         <IonPage>
             <PageHeader title="Browse Chapter" />
-            <StubPageContent
-                pkState={pkState}
-                query={query}
-                description="Browse one chapter of a book. The current query displays the text for the entire chapter as one string."
-            />
+            <IonContent>
+                <IonGrid>
+                    <IonRow>
+                        <IonCol>
+                            {queryState.data.docSet && queryState.data.docSet.document.mainSequence.blocks.map((b, n) => <p key={n}>{renderBlock(b)}</p>)}
+                        </IonCol>
+                    </IonRow>
+                </IonGrid>
+            </IonContent>
         </IonPage>
     );
 }
