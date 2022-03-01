@@ -24,31 +24,26 @@ export default function BrowseChapter({pkState}) {
 
     const verbose=true;
 
-   // <IonCol>
-   // {JSON.stringify(queryState)}
-   //</IonCol>
-    // {queryState.data.docSet.document.cv.tokens.map((t, n) => [<span key={n}>{t.payload}</span>,' '])} //tokens{payload} // {JSON.stringify(queryState)}
-
     const queryState = useQuery({
         ...pkState,
         query,
         verbose,
     });
-
-    //console.log(queryState.data);
-
-    const renderBlock = b => b.items.map((b, n) => {
-        if (b.type === 'token')
-        {
-            return <span key={n}>{b.payload}</span>;
-        }
-        else if (b.type === 'scope' && b.subType === 'start' && b.payload.startsWith('verse/'))
-        {
+    
+    const renderParagraphContents = b => b.items.map((b, n) => {
+        if (b.type === 'token') {
+            return <span className={'c' + n}>{b.payload}</span>;
+        } else if (b.type === 'scope' && b.subType === 'start' && b.payload.startsWith('verses/')) {
             return <span className='verse' key={n}>{b.payload.split('/')[1]}</span>;
         }
     }
     );
 
+    const renderBlock = (b, n) => {
+        return <p className={b.scopeLabels[0].split('/')[1]} key={n}>
+            {renderParagraphContents(b)}
+        </p>
+    };
 
     return (
         <IonPage>
@@ -57,7 +52,11 @@ export default function BrowseChapter({pkState}) {
                 <IonGrid>
                     <IonRow>
                         <IonCol>
-                            {queryState.data.docSet && queryState.data.docSet.document.mainSequence.blocks.map((b, n) => <p key={n}>{renderBlock(b)}</p>)}
+                            {
+                                queryState.data.docSet &&
+                                queryState.data.docSet.document.mainSequence.blocks
+                                    .map((b, n) => renderBlock(b, n))
+                            }
                         </IonCol>
                     </IonRow>
                 </IonGrid>
