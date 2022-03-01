@@ -1,44 +1,56 @@
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import {IonPage} from '@ionic/react';
+import { IonPage } from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import StubPageContent from "../../components/StubPageContent";
 
-import './BrowseVerse.css';
+import "./BrowseVerse.css";
 
-export default function BrowseVerse({pkState}) {
+export default function BrowseVerse({ pkState, navState, setNavState }) {
+  const getBBCVQuery = (navState) => {
+    const query =
+      "{" +
+      '  docSet(id:"%docSetId%") {' +
+      "    id" +
+      '    document(bookCode:"%bookCode%") {' +
+      '      cv(chapter:"%chapter%") {' +
+      "        text" +
+      "        tokens {" +
+      "          payload" +
+      "        }" +
+      "        items {" +
+      "          type" +
+      "          subType" +
+      "          payload" +
+      "        }" +
+      "      }" +
+      "    }" +
+      "  }" +
+      "}";
+    return query
+      .replace("%docSetId%", navState.docSetId)
+      .replace("%bookCode%", navState.bookCode)
+      .replace("%chapter%", navState.chapter);
+  };
 
-    const query = '{' +
-    '  docSet(id:"xyz-spa_rv09") {' +
-    '    id' +
-    '    document(bookCode:"GAL") {' +
-    '      cv(chapter:"5") {' +
-    '        text' +
-    '        tokens {' +
-    '          payload' +
-    '        }' +
-    '        items {' +
-    '          type' +
-    '          subType' +
-    '          payload' +
-    '        }' +
-    '      }' +
-    '    }' +
-    '  }' +
-    '}';
-
-    return (
-        <IonPage>
-            <PageHeader title="Browse Verse" />
-            <StubPageContent
-                pkState={pkState}
-                query={query}
-                description="Show details of one verse. The current query shows the verse content as text, as tokens and as items."
-            />
-        </IonPage>
-    );
+  return (
+    <IonPage>
+      <PageHeader
+        title="Browse Verse"
+        navState={navState}
+        setNavState={setNavState}
+      />
+      <StubPageContent
+        pkState={pkState}
+        query={getBBCVQuery(navState)}
+        description="Show details of one verse. The current query shows the verse content as text, as tokens and as items."
+      />
+    </IonPage>
+  );
 }
 
 BrowseVerse.propTypes = {
-    pkState: PropTypes.object.isRequired,
+  pkState: PropTypes.object.isRequired,
+  navState: PropTypes.object.isRequired,
+  setNavState: PropTypes.func.isRequired,
 };
