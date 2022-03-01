@@ -37,7 +37,7 @@ export default function BrowseChapter({pkState}) {
 
     //console.log(queryState.data);
 
-    const renderBlock = b => b.items.map((b, n) => {
+    const renderParagraphContents = b => b.items.map((b, n) => {
         if (b.type === 'token')
         {
             return <span key={n}>{b.payload}</span>;
@@ -49,6 +49,9 @@ export default function BrowseChapter({pkState}) {
     }
     );
 
+    const renderBlock = (b, n) => {
+        return <p className={b.scopeLabels[0].split('/')[1]} key={n}>{renderParagraphContents(b)}</p>
+    };
 
     return (
         <IonPage>
@@ -57,7 +60,7 @@ export default function BrowseChapter({pkState}) {
                 <IonGrid>
                     <IonRow>
                         <IonCol>
-                            {queryState.data.docSet && queryState.data.docSet.document.mainSequence.blocks.map((b, n) => <p key={n}>{renderBlock(b)}</p>)}
+                            {queryState.data.docSet && queryState.data.docSet.document.mainSequence.blocks.map((b, n) => renderBlock(b, n))}
                         </IonCol>
                     </IonRow>
                 </IonGrid>
