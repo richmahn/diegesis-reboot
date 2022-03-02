@@ -46,7 +46,7 @@ export default function BrowseVerse({ pkState, navState, setNavState }) {
         }
         else if (i.type === 'scope' && i.subType === 'start' && i.payload.startsWith('verse/'))
         {
-            return <span className='scrRef' key={n}>{'MAT 6:' + i.payload.split('/')[1]}</span>;
+            return <span className='scrRef' key={n}>{navState.bookCode + ' ' + navState.chapter + ':' + i.payload.split('/')[1]}</span>;
         }
     }
     );
