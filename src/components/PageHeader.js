@@ -13,7 +13,7 @@ export default function PageHeader({title, navState, setNavState, catalog}) {
     const setBible = (value) => {
         setNavState((prevState) => ({ ...prevState, docSetId: value }));
     }
-    
+
     useEffect(() => {
         if(catalog?.docSets){
         setBibles(catalog?.docSets?? []);
@@ -39,7 +39,7 @@ export default function PageHeader({title, navState, setNavState, catalog}) {
                                 onIonChange={e => setBible(e.detail.value)}
                             >
                                {bibles?.map((bible)=>
-                                   <IonSelectOption value={bible.id} key={bible.id}> {bible.id}</IonSelectOption>
+                                   <IonSelectOption value={bible.id} key={bible.id}>{bible.id}</IonSelectOption>
                                )}
                             </IonSelect>
                         </IonCol>
