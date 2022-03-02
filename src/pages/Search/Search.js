@@ -6,7 +6,7 @@ import StubPageContent from "../../components/StubPageContent";
 
 import "./Search.css";
 
-export default function Search({ pkState, navState, setNavState }) {
+export default function Search({ pkState, navState, setNavState, catalog }) {
   const getSearchQuery = (navState, searchPhrase) => {
     const query =
       "{" +
@@ -34,6 +34,7 @@ export default function Search({ pkState, navState, setNavState }) {
         title="Search"
         navState={navState}
         setNavState={setNavState}
+        catalog={catalog}
       />
       <StubPageContent
         pkState={pkState}
@@ -48,4 +49,5 @@ Search.propTypes = {
   pkState: PropTypes.object.isRequired,
   navState: PropTypes.object.isRequired,
   setNavState: PropTypes.func.isRequired,
+  catalog: PropTypes.object.isRequired,
 };

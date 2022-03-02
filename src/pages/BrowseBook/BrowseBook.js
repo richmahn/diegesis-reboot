@@ -5,7 +5,7 @@ import PageHeader from "../../components/PageHeader";
 import StubPageContent from "../../components/StubPageContent";
 import "./BrowseBook.css";
 
-export default function BrowseBook({ pkState, navState, setNavState }) {
+export default function BrowseBook({ pkState, navState, setNavState, catalog }) {
   const getBBQuery = (navState) => {
     const query =
       "{" +
@@ -28,6 +28,7 @@ export default function BrowseBook({ pkState, navState, setNavState }) {
         title="Browse Book"
         navState={navState}
         setNavState={setNavState}
+        catalog={catalog}
       />
       <StubPageContent
         pkState={pkState}
@@ -42,4 +43,5 @@ BrowseBook.propTypes = {
   pkState: PropTypes.object.isRequired,
   navState: PropTypes.object.isRequired,
   setNavState: PropTypes.func.isRequired,
+  catalog: PropTypes.object.isRequired,
 };

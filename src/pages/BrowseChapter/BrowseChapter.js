@@ -7,7 +7,7 @@ import PageHeader from "../../components/PageHeader";
 
 import "./BrowseChapter.css";
 
-export default function BrowseChapter({ pkState, navState, setNavState }) {
+export default function BrowseChapter({ pkState, navState, setNavState, catalog }) {
   const getBBCQuery = (navState) => {
       const query = '{' +
           '  docSet(id:"%docSetId%") {' +
@@ -53,7 +53,7 @@ export default function BrowseChapter({ pkState, navState, setNavState }) {
 
     return (
         <IonPage>
-            <PageHeader title="Browse Chapter" navState={navState}  setNavState={setNavState} />
+            <PageHeader title="Browse Chapter" navState={navState}  setNavState={setNavState} catalog={catalog} />
             <IonContent>
                 <IonGrid>
                     <IonRow>
@@ -75,4 +75,5 @@ BrowseChapter.propTypes = {
   pkState: PropTypes.object.isRequired,
   navState: PropTypes.object.isRequired,
   setNavState: PropTypes.func.isRequired,
+  catalog: PropTypes.object.isRequired,
 };

@@ -6,7 +6,7 @@ import StubPageContent from "../../components/StubPageContent";
 
 import "./BrowseVerse.css";
 
-export default function BrowseVerse({ pkState, navState, setNavState }) {
+export default function BrowseVerse({ pkState, navState, setNavState, catalog }) {
   const getBBCVQuery = (navState) => {
     const query =
       "{" +
@@ -39,6 +39,7 @@ export default function BrowseVerse({ pkState, navState, setNavState }) {
         title="Browse Verse"
         navState={navState}
         setNavState={setNavState}
+        catalog={catalog}
       />
       <StubPageContent
         pkState={pkState}
@@ -53,4 +54,5 @@ BrowseVerse.propTypes = {
   pkState: PropTypes.object.isRequired,
   navState: PropTypes.object.isRequired,
   setNavState: PropTypes.func.isRequired,
+  catalog: PropTypes.object.isRequired,
 };

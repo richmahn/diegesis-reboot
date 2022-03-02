@@ -25,6 +25,8 @@ import BrowseChapter from "./pages/BrowseChapter/BrowseChapter";
 import BrowseVerse from "./pages/BrowseVerse/BrowseVerse";
 import Search from "./pages/Search/Search";
 import doFetch from "./lib/doFetch";
+import { useCatalog } from "proskomma-react-hooks";
+
 import "./App.css";
 
 /* Core CSS required for Ionic components to work properly */
@@ -58,6 +60,13 @@ const App = () => {
     chapter: "1",
     verse: "1",
   };
+
+  const { catalog, error:catalogError } = useCatalog({
+    proskomma: pkState.proskomma,
+    stateId: pkState.stateId,
+    verbose: true,
+  });
+
   const [navState, setNavState] = useState(initialState);
 
   const onLoaded = useCallback(() => {
@@ -75,6 +84,8 @@ const App = () => {
           <IonRouterOutlet>
             <Route path="/versions">
               <Versions
+                catalogError={catalogError}
+                catalog={catalog}
                 pkState={pkState}
                 navState={navState}
                 setNavState={setNavState}
@@ -82,6 +93,7 @@ const App = () => {
             </Route>
             <Route path="/browseBook">
               <BrowseBook
+                catalog={catalog}
                 navState={navState}
                 setNavState={setNavState}
                 pkState={pkState}
@@ -89,6 +101,7 @@ const App = () => {
             </Route>
             <Route path="/browseChapter">
               <BrowseChapter
+                catalog={catalog}
                 pkState={pkState}
                 navState={navState}
                 setNavState={setNavState}
@@ -96,6 +109,7 @@ const App = () => {
             </Route>
             <Route path="/browseVerse">
               <BrowseVerse
+                catalog={catalog}
                 pkState={pkState}
                 navState={navState}
                 setNavState={setNavState}
@@ -103,6 +117,7 @@ const App = () => {
             </Route>
             <Route path="/search">
               <Search
+                catalog={catalog}
                 pkState={pkState}
                 navState={navState}
                 setNavState={setNavState}
