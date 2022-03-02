@@ -9,12 +9,14 @@ import './BrowseVerse.css';
 export default function BrowseVerse({pkState}) {
 
     const query = '{' +
-    '  docSet(id:"xyz-spa_rv09") {' +
+    '  docSets {' +
     '    id' +
+    '    Language:selector(id:"lang")' +
+    '    Version:selector(id:"abbr")' +
     '    document(bookCode:"MAT") {' +
     '      mainSequence {' +
     '        blocks(withScriptureCV:"6:9") {' +
-    '            items{type subType payload}' +
+    '            items(withScriptureCV:"6:9"){type subType payload}' +
     '       }' +
     '      }' +
     '    }' +
@@ -29,20 +31,37 @@ export default function BrowseVerse({pkState}) {
          verbose,
      });
 
-    const renderParagraphContents = b => b.items.map((b, n) => {
-        if (b.type === 'token')
+    console.log(queryState);
+
+    const renderParagraphContents = b => b.items.map((i, n) => {
+        if (i.type === 'token')
         {
-            return <span className={'c' + n}>{b.payload}</span>;
+            return <span className={'c' + n} key={n}>{i.payload}</span>;
         }
-        else if (b.type === 'scope' && b.subType === 'start' && b.payload.startsWith('verse/'))
+        else if (i.type === 'scope' && i.subType === 'start' && i.payload.startsWith('verse/'))
         {
-            return <h1 key={n}>{'MAT 6:' + b.payload.split('/')[1]}</h1>;
+            return <span className='scrRef' key={n}>{'MAT 6:' + i.payload.split('/')[1]}</span>;
         }
     }
     );
 
     const renderVerse = (b, n) => {
-         return <p key={n}>{renderParagraphContents(b)}</p>
+         return <p className="scripture" key={n}>{renderParagraphContents(b)}</p>
+    };
+
+    const renderDocSetInfo = (ds) => {
+        return <><p><span className='label'>Language: </span><span className='identifier'>{ds.Language}</span></p><p><span className='label'>Version: </span><span className='identifier'>{ds.Version}</span></p></>
+    }
+
+    const renderRow = (ds, n) => {
+         return <IonRow key={n}>
+                    <IonCol size="2" key="docId">
+                        {renderDocSetInfo(ds)}
+                    </IonCol>
+                    <IonCol key ="verse">
+                        {ds.document.mainSequence.blocks && ds.document.mainSequence.blocks.map((b, n) => renderVerse(b, n))}
+                    </IonCol>
+                </IonRow>
     };
 
     return (
@@ -50,11 +69,7 @@ export default function BrowseVerse({pkState}) {
             <PageHeader title="Browse Verse" />
             <IonContent>
                 <IonGrid>
-                    <IonRow>
-                        <IonCol>
-                            {queryState.data.docSet && queryState.data.docSet.document.mainSequence.blocks.map((b, n) => renderVerse(b, n))}
-                        </IonCol>
-                    </IonRow>
+                    {queryState.data.docSets && queryState.data.docSets.map((ds, n) => renderRow(ds, n))}
                 </IonGrid>
             </IonContent>
         </IonPage>
