@@ -36,11 +36,11 @@ export default function BrowseChapter({ pkState, navState, setNavState }) {
         verbose,
     });
 
-    const renderParagraphContents = b => b.items.map((b, n) => {
-        if (b.type === 'token') {
-            return <span className={'c' + n}>{b.payload}</span>;
-        } else if (b.type === 'scope' && b.subType === 'start' && b.payload.startsWith('verses/')) {
-            return <span className='verse' key={n}>{b.payload.split('/')[1]}</span>;
+    const renderParagraphContents = b => b.items.map((i, n) => {
+        if (i.type === 'token') {
+            return <span className={'c' + n}>{i.payload}</span>;
+        } else if (i.type === 'scope' && i.subType === 'start' && i.payload.startsWith('verses/')) {
+            return <span className='verse' key={n}>{i.payload.split('/')[1]}</span>;
         }
     }
     );
