@@ -15,7 +15,7 @@ import { useProskomma } from "proskomma-react-hooks";
 import {
   albumsOutline,
   readerOutline,
-  book,
+  bookOutline,
   diamond,
   search,
 } from "ionicons/icons";
@@ -126,7 +126,7 @@ const App = () => {
               href="/browseBook"
               data-test-id="tab-bar-button-tab3"
             >
-              <IonIcon icon={book} />
+              <IonIcon icon={bookOutline} />
               <IonLabel>Book</IonLabel>
             </IonTabButton>
             <IonTabButton
