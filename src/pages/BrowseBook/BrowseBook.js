@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonButton} from "@ionic/react";
+import {IonCol, IonContent, IonGrid, IonPage, IonRow} from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import {ScriptureDocSet, ScriptureParaModel, ScriptureParaModelQuery} from "proskomma-render";
 import BrowseDocumentModel from "./BrowseDocumentModel";
 import "./BrowseBook.css";
 
 export default function BrowseBook({pkState, navState, setNavState}) {
-    const [renderNo, setRenderNo] = useState(0);
     const [renderedSequence, setRenderedSequence] = useState(null);
     useEffect(
         () => {
@@ -39,7 +38,7 @@ export default function BrowseBook({pkState, navState, setNavState}) {
             }
             doRender().then();
         },
-        [renderNo]
+        [pkState.stateId]
     );
     return (
         <IonPage>
@@ -50,13 +49,6 @@ export default function BrowseBook({pkState, navState, setNavState}) {
             />
             <IonContent>
                 <IonGrid>
-                    <IonRow>
-                        <IonCol>
-                            <IonButton onClick={()=> setRenderNo(renderNo + 1)}>
-                                Render
-                            </IonButton>
-                        </IonCol>
-                    </IonRow>
                     <IonRow>
                         <IonCol>
                             {renderedSequence}
