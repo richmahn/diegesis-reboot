@@ -1,45 +1,75 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import { IonPage } from "@ionic/react";
+import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonButton} from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
-import StubPageContent from "../../components/StubPageContent";
+import {ScriptureDocSet, ScriptureParaModel, ScriptureParaModelQuery} from "proskomma-render";
+import BrowseDocumentModel from "./BrowseDocumentModel";
 import "./BrowseBook.css";
 
-export default function BrowseBook({ pkState, navState, setNavState }) {
-  const getBBQuery = (navState) => {
-    const query =
-      "{" +
-      'docSet(id:"%docSetId%") {' +
-      "  id" +
-      '  document(bookCode:"%bookCode%") {' +
-      "      mainBlocks {" +
-      "        text" +
-      "      }" +
-      "    }" +
-      "  }" +
-      "}";
-    return query
-      .replace("%docSetId%", navState.docSetId)
-      .replace("%bookCode%", navState.bookCode);
-  };
-  return (
-    <IonPage>
-      <PageHeader
-        title="Browse Book"
-        navState={navState}
-        setNavState={setNavState}
-      />
-      <StubPageContent
-        pkState={pkState}
-        query={getBBQuery(navState)}
-        description="View all the content of a book. The current query displays plain text for one paragraph at a time."
-      />
-    </IonPage>
-  );
+export default function BrowseBook({pkState, navState, setNavState}) {
+    const [renderNo, setRenderNo] = useState(0);
+    const [renderedSequence, setRenderedSequence] = useState(null);
+    useEffect(
+        () => {
+            const doRender = async () => {
+                const config = {
+                    rendered: [],
+                    versesCallback: (() => {
+                    }),
+                    chapter: navState.chapter,
+                    verse: navState.verse,
+                };
+                // KLUDGE!!!
+                const docId =
+                    Object.keys(pkState.proskomma.documents).length > 0 ?
+                        Object.values(pkState.proskomma.documents)
+                            .filter((d => d.docSetId === navState.docSetId))[0].id :
+                        '';
+                // END OF KLUDGE!!!
+                const resData = await ScriptureParaModelQuery(
+                    pkState.proskomma,
+                    [navState.docSetId],
+                    [docId]);
+                const model = new ScriptureParaModel(resData, config);
+                const docSetModel = new ScriptureDocSet(resData, model.context, config);
+                docSetModel.addDocumentModel("default", new BrowseDocumentModel(resData, model.context, config));
+                model.addDocSetModel('default', docSetModel);
+                model.render();
+                setRenderedSequence(config.rendered);
+            }
+            doRender().then();
+        },
+        [renderNo]
+    );
+    return (
+        <IonPage>
+            <PageHeader
+                title="Browse Book"
+                navState={navState}
+                setNavState={setNavState}
+            />
+            <IonContent>
+                <IonGrid>
+                    <IonRow>
+                        <IonCol>
+                            <IonButton onClick={()=> setRenderNo(renderNo + 1)}>
+                                Render
+                            </IonButton>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            {renderedSequence}
+                        </IonCol>
+                    </IonRow>
+                </IonGrid>
+            </IonContent>
+        </IonPage>
+    );
 }
 
 BrowseBook.propTypes = {
-  pkState: PropTypes.object.isRequired,
-  navState: PropTypes.object.isRequired,
-  setNavState: PropTypes.func.isRequired,
+    pkState: PropTypes.object.isRequired,
+    navState: PropTypes.object.isRequired,
+    setNavState: PropTypes.func.isRequired,
 };
