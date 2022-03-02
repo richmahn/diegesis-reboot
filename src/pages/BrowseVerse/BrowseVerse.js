@@ -1,33 +1,39 @@
-import React from 'react';
+import React from "react";
 import {useQuery} from "proskomma-react-hooks";
 import PropTypes from "prop-types";
 import {IonCol, IonContent, IonGrid, IonPage, IonRow} from '@ionic/react';
 import PageHeader from "../../components/PageHeader";
 
-import './BrowseVerse.css';
+import "./BrowseVerse.css";
 
-export default function BrowseVerse({pkState}) {
-
-    const query = '{' +
+export default function BrowseVerse({ pkState, navState, setNavState }) {
+  const getBBCVQuery = (navState) => {
+    const query =
+    '{' +
     '  docSets {' +
-    '    id' +
     '    Language:selector(id:"lang")' +
     '    Version:selector(id:"abbr")' +
-    '    document(bookCode:"MAT") {' +
+    '    document(bookCode:"%bookCode%") {' +
     '      mainSequence {' +
-    '        blocks(withScriptureCV:"6:9") {' +
-    '            items(withScriptureCV:"6:9"){type subType payload}' +
+    '        blocks(withScriptureCV:"%chapter%:9") {' +
+    '            items(withScriptureCV:"%chapter%:9"){type subType payload}' +
     '       }' +
-    '      }' +
-    '    }' +
-    '  }' +
+    '     }' +
+    '   }' +
+    ' }' +
     '}';
+    
+    return query
+      .replace("%docSetId%", navState.docSetId)
+      .replace("%bookCode%", navState.bookCode)
+      .replaceAll("%chapter%", navState.chapter);
+  };
 
     const verbose=true;
 
     const queryState = useQuery({
          ...pkState,
-         query,
+         query: getBBCVQuery(navState),
          verbose,
      });
 
@@ -64,18 +70,24 @@ export default function BrowseVerse({pkState}) {
                 </IonRow>
     };
 
-    return (
-        <IonPage>
-            <PageHeader title="Browse Verse" />
+  return (
+    <IonPage>
+      <PageHeader
+        title="Browse Verse"
+        navState={navState}
+        setNavState={setNavState}
+      />
             <IonContent>
                 <IonGrid>
                     {queryState.data.docSets && queryState.data.docSets.map((ds, n) => renderRow(ds, n))}
                 </IonGrid>
             </IonContent>
-        </IonPage>
-    );
+    </IonPage>
+  );
 }
 
 BrowseVerse.propTypes = {
-    pkState: PropTypes.object.isRequired,
+  pkState: PropTypes.object.isRequired,
+  navState: PropTypes.object.isRequired,
+  setNavState: PropTypes.func.isRequired,
 };

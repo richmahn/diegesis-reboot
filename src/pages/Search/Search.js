@@ -1,39 +1,51 @@
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import {IonPage} from '@ionic/react';
+import { IonPage } from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import StubPageContent from "../../components/StubPageContent";
 
-import './Search.css';
+import "./Search.css";
 
-export default function Search({pkState}) {
+export default function Search({ pkState, navState, setNavState }) {
+  const getSearchQuery = (navState, searchPhrase) => {
+    const query =
+      "{" +
+      '  docSet(id:"%docSetId%") {' +
+      "    id" +
+      '    document(bookCode:"%bookCode%") {' +
+      "      mainSequence {" +
+      '    blocks(withChars:["%searchPhrase%"]) {' +
+      '      scopeLabels(startsWith:["chapter", "verse/"])' +
+      "      text" +
+      "    }" +
+      "  }" +
+      "    }" +
+      "  }" +
+      "}";
+    return query
+      .replace("%docSetId%", navState.docSetId)
+      .replace("%bookCode%", navState.bookCode)
+      .replace("%searchPhrase%", searchPhrase);
+  };
 
-    const query = '{' +
-    '  docSet(id:"xyz-spa_vbl") {' +
-    '    id' +
-    '    document(bookCode:"GAL") {' +
-    '      mainSequence {' +
-        '    blocks(withChars:["libertad"]) {' +
-        '      scopeLabels(startsWith:["chapter", "verse/"])' +
-        '      text' +
-        '    }' +
-        '  }' +
-    '    }' +
-    '  }' +
-    '}';
-
-    return (
-        <IonPage>
-            <PageHeader title="Search" />
-            <StubPageContent
-                pkState={pkState}
-                query={query}
-                description="Search for verses containing certain words (currently 'libertad' in Galatians)."
-            />
-        </IonPage>
-    );
+  return (
+    <IonPage>
+      <PageHeader
+        title="Search"
+        navState={navState}
+        setNavState={setNavState}
+      />
+      <StubPageContent
+        pkState={pkState}
+        query={getSearchQuery(navState, "free")}
+        description="Search for verses containing certain words (currently 'free' in Galatians)."
+      />
+    </IonPage>
+  );
 }
 
 Search.propTypes = {
-    pkState: PropTypes.object.isRequired,
+  pkState: PropTypes.object.isRequired,
+  navState: PropTypes.object.isRequired,
+  setNavState: PropTypes.func.isRequired,
 };
