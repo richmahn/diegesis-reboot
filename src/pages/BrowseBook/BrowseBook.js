@@ -10,30 +10,32 @@ export default function BrowseBook({ pkState, navState, setNavState, catalog }) 
     const [renderedSequence, setRenderedSequence] = useState(null);
 
     useEffect(() => {
-        const doRender = async () => {
-            const config = {
-                rendered: [],
-                versesCallback: () => {},
-                chapter: navState.chapter,
-                verse: navState.verse,
+        if (navState.docId && navState.docSetId) {
+            const doRender = async () => {
+                const config = {
+                    rendered: [],
+                    versesCallback: () => {},
+                    chapter: navState.chapter,
+                    verse: navState.verse,
+                };
+                const resData = await ScriptureParaModelQuery(
+                    pkState.proskomma,
+                    [navState.docSetId],
+                    [navState.docId]
+                );
+                const model = new ScriptureParaModel(resData, config);
+                const docSetModel = new ScriptureDocSet(resData, model.context, config);
+                docSetModel.addDocumentModel(
+                    'default',
+                    new BrowseDocumentModel(resData, model.context, config)
+                );
+                model.addDocSetModel('default', docSetModel);
+                model.render();
+                setRenderedSequence(config.rendered);
             };
-            const resData = await ScriptureParaModelQuery(
-                pkState.proskomma,
-                [navState.docSetId],
-                [navState.docId]
-            );
-            const model = new ScriptureParaModel(resData, config);
-            const docSetModel = new ScriptureDocSet(resData, model.context, config);
-            docSetModel.addDocumentModel(
-                'default',
-                new BrowseDocumentModel(resData, model.context, config)
-            );
-            model.addDocSetModel('default', docSetModel);
-            model.render();
-            setRenderedSequence(config.rendered);
-        };
-        doRender().then();
-    }, [pkState.stateId]);
+            doRender().then();
+        }
+    }, [pkState.stateId, navState.docSetId, navState.docId]);
     return (
         <IonPage>
             <PageHeader
