@@ -25,6 +25,8 @@ import BrowseChapter from "./pages/BrowseChapter/BrowseChapter";
 import BrowseVerse from "./pages/BrowseVerse/BrowseVerse";
 import Search from "./pages/Search/Search";
 import doFetch from "./lib/doFetch";
+import {useCatalog} from "proskomma-react-hooks";
+
 import "./App.css";
 
 /* Core CSS required for Ionic components to work properly */
@@ -58,6 +60,13 @@ const App = () => {
         chapter: "1",
         verse: "1",
     };
+
+    const {catalog, error: catalogError} = useCatalog({
+        proskomma: pkState.proskomma,
+        stateId: pkState.stateId,
+        verbose: true,
+    });
+
     const [navState, setNavState] = useState(initialState);
 
     const onLoaded = useCallback(() => {
@@ -75,6 +84,8 @@ const App = () => {
                     <IonRouterOutlet>
                         <Route path="/versions">
                             <Versions
+                                catalogError={catalogError}
+                                catalog={catalog}
                                 pkState={pkState}
                                 navState={navState}
                                 setNavState={setNavState}
@@ -82,6 +93,7 @@ const App = () => {
                         </Route>
                         <Route path="/browseBook">
                             <BrowseBook
+                                catalog={catalog}
                                 navState={navState}
                                 setNavState={setNavState}
                                 pkState={pkState}
@@ -89,6 +101,7 @@ const App = () => {
                         </Route>
                         <Route path="/browseChapter">
                             <BrowseChapter
+                                catalog={catalog}
                                 pkState={pkState}
                                 navState={navState}
                                 setNavState={setNavState}
@@ -96,6 +109,7 @@ const App = () => {
                         </Route>
                         <Route path="/browseVerse">
                             <BrowseVerse
+                                catalog={catalog}
                                 pkState={pkState}
                                 navState={navState}
                                 setNavState={setNavState}
@@ -103,22 +117,23 @@ const App = () => {
                         </Route>
                         <Route path="/search">
                             <Search
+                                catalog={catalog}
                                 pkState={pkState}
                                 navState={navState}
                                 setNavState={setNavState}
                             />
                         </Route>
-                        <Route exact path="/">
-                            <Redirect to="/versions"/>
+                        <Route exact path="/" >
+                            <Redirect to="/versions" />
                         </Route>
                     </IonRouterOutlet>
-                    <IonTabBar slot="bottom">
+                    <IonTabBar slot="bottom" >
                         <IonTabButton
                             tab="versions"
                             href="/versions"
                             data-test-id="tab-bar-button-tab3"
                         >
-                            <IonIcon icon={albumsOutline}/>
+                            <IonIcon icon={albumsOutline} />
                             <IonLabel>Versions</IonLabel>
                         </IonTabButton>
                         <IonTabButton
@@ -126,7 +141,7 @@ const App = () => {
                             href="/browseBook"
                             data-test-id="tab-bar-button-tab3"
                         >
-                            <IonIcon icon={bookOutline}/>
+                            <IonIcon icon={bookOutline} />
                             <IonLabel>Book</IonLabel>
                         </IonTabButton>
                         <IonTabButton
@@ -134,7 +149,7 @@ const App = () => {
                             href="/browseChapter"
                             data-test-id="tab-bar-button-tab3"
                         >
-                            <IonIcon icon={readerOutline}/>
+                            <IonIcon icon={readerOutline} />
                             <IonLabel>Chapter</IonLabel>
                         </IonTabButton>
                         <IonTabButton
@@ -142,7 +157,7 @@ const App = () => {
                             href="/browseVerse"
                             data-test-id="tab-bar-button-tab3"
                         >
-                            <IonIcon icon={diamond}/>
+                            <IonIcon icon={diamond} />
                             <IonLabel>Verse</IonLabel>
                         </IonTabButton>
                         <IonTabButton
@@ -150,7 +165,7 @@ const App = () => {
                             href="/search"
                             data-test-id="tab-bar-button-tab3"
                         >
-                            <IonIcon icon={search}/>
+                            <IonIcon icon={search} />
                             <IonLabel>Search</IonLabel>
                         </IonTabButton>
                     </IonTabBar>

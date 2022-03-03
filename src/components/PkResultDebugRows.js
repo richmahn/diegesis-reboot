@@ -9,7 +9,7 @@ export default function PkResultDebugRows({result}) {
         <IonRow>
             <IonCol>{
                 result.data ?
-                    <PkDataAsJson data={result.data}/> :
+                    <PkDataAsJson data={result.data} /> :
                     <IonTitle size="small">No Data</IonTitle>
             }</IonCol>
         </IonRow>
@@ -17,7 +17,7 @@ export default function PkResultDebugRows({result}) {
             result.errors && (result.errors.length > 0) &&
             <IonRow>
                 <IonCol>
-                    <PkErrors errors={result.errors}/>
+                    <PkErrors errors={result.errors} />
                 </IonCol>
             </IonRow>
         }

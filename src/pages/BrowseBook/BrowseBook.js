@@ -6,8 +6,9 @@ import {ScriptureDocSet, ScriptureParaModel, ScriptureParaModelQuery} from "pros
 import BrowseDocumentModel from "./BrowseDocumentModel";
 import "./BrowseBook.css";
 
-export default function BrowseBook({pkState, navState, setNavState}) {
+export default function BrowseBook({pkState, navState, setNavState, catalog}) {
     const [renderedSequence, setRenderedSequence] = useState(null);
+
     useEffect(
         () => {
             const doRender = async () => {
@@ -46,6 +47,7 @@ export default function BrowseBook({pkState, navState, setNavState}) {
                 title="Browse Book"
                 navState={navState}
                 setNavState={setNavState}
+                catalog={catalog}
             />
             <IonContent>
                 <IonGrid>
@@ -64,4 +66,5 @@ BrowseBook.propTypes = {
     pkState: PropTypes.object.isRequired,
     navState: PropTypes.object.isRequired,
     setNavState: PropTypes.func.isRequired,
+    catalog: PropTypes.object.isRequired,
 };

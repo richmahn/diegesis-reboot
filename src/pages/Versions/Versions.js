@@ -1,19 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {useCatalog} from "proskomma-react-hooks";
 import {IonCol, IonContent, IonGrid, IonPage, IonRow} from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import PkDataAsJson from "../../components/PkDataAsJson";
 import PkErrors from "../../components/PkErrors";
 import "./Versions.css";
 
-export default function Versions({pkState, navState, setNavState}) {
-    const {catalog, errors: catalogErrors} = useCatalog({
-        proskomma: pkState.proskomma,
-        stateId: pkState.stateId,
-        verbose: true,
-    });
-    console.log(catalog);
+export default function Versions({navState, setNavState, catalog, catalogErrors}) {
 
     return (
         <IonPage>
@@ -21,18 +14,19 @@ export default function Versions({pkState, navState, setNavState}) {
                 title="List Versions"
                 navState={navState}
                 setNavState={setNavState}
+                catalog={catalog}
             />
             <IonContent fullscreen>
                 <IonGrid>
                     <IonRow>
                         <IonCol>
-                            <PkDataAsJson data={catalog}/>
+                            <PkDataAsJson data={catalog} />
                         </IonCol>
                     </IonRow>
                     {catalogErrors && catalogErrors.length > 0 && (
                         <IonRow>
                             <IonCol>
-                                <PkErrors errors={catalogErrors}/>
+                                <PkErrors errors={catalogErrors} />
                             </IonCol>
                         </IonRow>
                     )}
@@ -43,7 +37,8 @@ export default function Versions({pkState, navState, setNavState}) {
 }
 
 Versions.propTypes = {
-    pkState: PropTypes.object.isRequired,
     navState: PropTypes.object.isRequired,
     setNavState: PropTypes.func.isRequired,
+    catalog: PropTypes.object.isRequired,
+    catalogErrors: PropTypes.any,
 };

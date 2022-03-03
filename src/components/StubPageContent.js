@@ -12,7 +12,7 @@ export default function StubPageContent({pkState, query, description}) {
         query,
         verbose,
     });
-    console.log(query);
+    // console.log(query);
     return (
         <IonContent fullscreen>
             <IonGrid>
@@ -21,7 +21,7 @@ export default function StubPageContent({pkState, query, description}) {
                         <IonTitle size="small">{description || "No Description"}</IonTitle>
                     </IonCol>
                 </IonRow>
-                <PkResultDebugRows result={queryState}/>
+                <PkResultDebugRows result={queryState} />
             </IonGrid>
         </IonContent>
     );

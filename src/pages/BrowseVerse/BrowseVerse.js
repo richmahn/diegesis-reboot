@@ -6,7 +6,7 @@ import PageHeader from "../../components/PageHeader";
 
 import "./BrowseVerse.css";
 
-export default function BrowseVerse({pkState, navState, setNavState}) {
+export default function BrowseVerse({pkState, navState, setNavState, catalog}) {
     const getBBCVQuery = (navState) => {
         const query =
             '{' +
@@ -37,14 +37,17 @@ export default function BrowseVerse({pkState, navState, setNavState}) {
         verbose,
     });
 
-    console.log(queryState);
+    // console.log(queryState);
 
     const renderParagraphContents = b => b.items.map((i, n) => {
             if (i.type === 'token') {
                 return <span className={'c' + n} key={n}>{i.payload}</span>;
             } else if (i.type === 'scope' && i.subType === 'start' && i.payload.startsWith('verse/')) {
-                return <span className='scrRef'
-                             key={n}>{navState.bookCode + ' ' + navState.chapter + ':' + i.payload.split('/')[1]}</span>;
+                return <span
+                    className='scrRef'
+                    key={n}
+                >{navState.bookCode + ' ' + navState.chapter + ':' + i.payload.split('/')[1]}
+                </span>;
             }
         }
     );
@@ -75,6 +78,7 @@ export default function BrowseVerse({pkState, navState, setNavState}) {
                 title="Browse Verse"
                 navState={navState}
                 setNavState={setNavState}
+                catalog={catalog}
             />
             <IonContent>
                 <IonGrid>
@@ -89,4 +93,5 @@ BrowseVerse.propTypes = {
     pkState: PropTypes.object.isRequired,
     navState: PropTypes.object.isRequired,
     setNavState: PropTypes.func.isRequired,
+    catalog: PropTypes.object.isRequired,
 };
