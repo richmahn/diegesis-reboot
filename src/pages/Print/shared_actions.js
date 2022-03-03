@@ -17,7 +17,7 @@ const sharedActions = {
     w: [
         'scope',
         (context, data) => data.payload.split("/")[1] === 'w',
-        (renderer, context, data) => {}
+        () => {}
     ],
     startBlock: [
         'startBlock',

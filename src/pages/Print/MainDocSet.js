@@ -89,7 +89,7 @@ const addActions = (dsInstance) => {
             let endHTML = endHTMLTemplate;
             renderer.backOutput.push(endHTML);
             const output = renderer.frontOutput.join('\n') + '\n' + bodyOutput + renderer.backOutput.join('\n');
-            console.log(output.substring(0, 1000))
+            renderer.config.output = output;
         }
     );
 }

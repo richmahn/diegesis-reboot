@@ -21,7 +21,7 @@ const addActions = (dInstance) => {
         (renderer, context) => {
             let cssPath = "../../CSS/styles.css";
             dInstance.head = [
-                '<meta charset=\"utf-8\"/>\n',
+                '<meta charset="utf-8"/>\n',
                 `<link type="text/css" rel="stylesheet" href="${cssPath}" />\n`,
                 `<title>${context.document.headers.h}</title>`,
             ];
