@@ -1,46 +1,39 @@
-import React, {useEffect, useState} from "react";
-import PropTypes from "prop-types";
-import {IonCol, IonContent, IonGrid, IonPage, IonRow} from "@ionic/react";
-import PageHeader from "../../components/PageHeader";
-import {ScriptureDocSet, ScriptureParaModel, ScriptureParaModelQuery} from "proskomma-render";
-import BrowseDocumentModel from "./BrowseDocumentModel";
-import "./BrowseBook.css";
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { IonCol, IonContent, IonGrid, IonPage, IonRow } from '@ionic/react';
+import PageHeader from '../../components/PageHeader';
+import { ScriptureDocSet, ScriptureParaModel, ScriptureParaModelQuery } from 'proskomma-render';
+import BrowseDocumentModel from './BrowseDocumentModel';
+import './BrowseBook.css';
 
-export default function BrowseBook({pkState, navState, setNavState, catalog}) {
+export default function BrowseBook({ pkState, navState, setNavState, catalog }) {
     const [renderedSequence, setRenderedSequence] = useState(null);
 
-    useEffect(
-        () => {
-            const doRender = async () => {
-                const config = {
-                    rendered: [],
-                    versesCallback: (() => {
-                    }),
-                    chapter: navState.chapter,
-                    verse: navState.verse,
-                };
-                // KLUDGE!!!
-                const docId =
-                    Object.keys(pkState.proskomma.documents).length > 0 ?
-                        Object.values(pkState.proskomma.documents)
-                            .filter((d => d.docSetId === navState.docSetId))[0].id :
-                        '';
-                // END OF KLUDGE!!!
-                const resData = await ScriptureParaModelQuery(
-                    pkState.proskomma,
-                    [navState.docSetId],
-                    [docId]);
-                const model = new ScriptureParaModel(resData, config);
-                const docSetModel = new ScriptureDocSet(resData, model.context, config);
-                docSetModel.addDocumentModel("default", new BrowseDocumentModel(resData, model.context, config));
-                model.addDocSetModel('default', docSetModel);
-                model.render();
-                setRenderedSequence(config.rendered);
-            }
-            doRender().then();
-        },
-        [pkState.stateId]
-    );
+    useEffect(() => {
+        const doRender = async () => {
+            const config = {
+                rendered: [],
+                versesCallback: () => {},
+                chapter: navState.chapter,
+                verse: navState.verse,
+            };
+            const resData = await ScriptureParaModelQuery(
+                pkState.proskomma,
+                [navState.docSetId],
+                [navState.docId]
+            );
+            const model = new ScriptureParaModel(resData, config);
+            const docSetModel = new ScriptureDocSet(resData, model.context, config);
+            docSetModel.addDocumentModel(
+                'default',
+                new BrowseDocumentModel(resData, model.context, config)
+            );
+            model.addDocSetModel('default', docSetModel);
+            model.render();
+            setRenderedSequence(config.rendered);
+        };
+        doRender().then();
+    }, [pkState.stateId]);
     return (
         <IonPage>
             <PageHeader
@@ -52,9 +45,7 @@ export default function BrowseBook({pkState, navState, setNavState, catalog}) {
             <IonContent>
                 <IonGrid>
                     <IonRow>
-                        <IonCol>
-                            {renderedSequence}
-                        </IonCol>
+                        <IonCol>{renderedSequence}</IonCol>
                     </IonRow>
                 </IonGrid>
             </IonContent>
