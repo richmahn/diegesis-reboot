@@ -7,28 +7,28 @@ import PageHeader from "../../components/PageHeader";
 
 import "./BrowseChapter.css";
 
-export default function BrowseChapter({ pkState, navState, setNavState, catalog }) {
-  const getBBCQuery = (navState) => {
-      const query = '{' +
-          '  docSet(id:"%docSetId%") {' +
-          '    id' +
-          '    document(bookCode:"%bookCode%") {' +
-          '      mainSequence {' +
-          '        blocks(withScriptureCV:"%chapter%") {' +
-          '           scopeLabels(startsWith:["blockTag"])' +
-          '            items{type subType payload}' +
-          '       }' +
-          '      }' +
-          '    }' +
-          '  }' +
-          '}';
-    return query
-      .replace("%docSetId%", navState.docSetId)
-      .replace("%bookCode%", navState.bookCode)
-      .replace("%chapter%", navState.chapter);
-  };
+export default function BrowseChapter({pkState, navState, setNavState, catalog}) {
+    const getBBCQuery = (navState) => {
+        const query = '{' +
+            '  docSet(id:"%docSetId%") {' +
+            '    id' +
+            '    document(bookCode:"%bookCode%") {' +
+            '      mainSequence {' +
+            '        blocks(withScriptureCV:"%chapter%") {' +
+            '           scopeLabels(startsWith:["blockTag"])' +
+            '            items{type subType payload}' +
+            '       }' +
+            '      }' +
+            '    }' +
+            '  }' +
+            '}';
+        return query
+            .replace("%docSetId%", navState.docSetId)
+            .replace("%bookCode%", navState.bookCode)
+            .replace("%chapter%", navState.chapter);
+    };
 
-    const verbose=true;
+    const verbose = true;
 
     const queryState = useQuery({
         ...pkState,
@@ -37,12 +37,12 @@ export default function BrowseChapter({ pkState, navState, setNavState, catalog 
     });
 
     const renderParagraphContents = b => b.items.map((b, n) => {
-        if (b.type === 'token') {
-            return <span className={'c' + n} key={n}>{b.payload}</span>;
-        } else if (b.type === 'scope' && b.subType === 'start' && b.payload.startsWith('verses/')) {
-            return <span className='verse' key={n}>{b.payload.split('/')[1]}</span>;
+            if (b.type === 'token') {
+                return <span className={'c' + n} key={n}>{b.payload}</span>;
+            } else if (b.type === 'scope' && b.subType === 'start' && b.payload.startsWith('verses/')) {
+                return <span className='verse' key={n}>{b.payload.split('/')[1]}</span>;
+            }
         }
-    }
     );
 
     const renderBlock = (b, n) => {
@@ -53,7 +53,7 @@ export default function BrowseChapter({ pkState, navState, setNavState, catalog 
 
     return (
         <IonPage>
-            <PageHeader title="Browse Chapter" navState={navState}  setNavState={setNavState} catalog={catalog} />
+            <PageHeader title="Browse Chapter" navState={navState} setNavState={setNavState} catalog={catalog}/>
             <IonContent>
                 <IonGrid>
                     <IonRow>
@@ -72,8 +72,8 @@ export default function BrowseChapter({ pkState, navState, setNavState, catalog 
 }
 
 BrowseChapter.propTypes = {
-  pkState: PropTypes.object.isRequired,
-  navState: PropTypes.object.isRequired,
-  setNavState: PropTypes.func.isRequired,
-  catalog: PropTypes.object.isRequired,
+    pkState: PropTypes.object.isRequired,
+    navState: PropTypes.object.isRequired,
+    setNavState: PropTypes.func.isRequired,
+    catalog: PropTypes.object.isRequired,
 };

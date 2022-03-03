@@ -8,7 +8,7 @@ export default function PkErrors({errors}) {
         <IonGrid>
             <IonRow>
                 <IonCol>
-                    <IonTitle className="error"  size="small">Errors</IonTitle>
+                    <IonTitle className="error" size="small">Errors</IonTitle>
                 </IonCol>
             </IonRow>
             <IonRow>

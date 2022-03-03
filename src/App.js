@@ -1,23 +1,23 @@
-import React, { useEffect, useCallback } from "react";
-import { Redirect, Route } from "react-router-dom";
+import React, {useEffect, useCallback} from "react";
+import {Redirect, Route} from "react-router-dom";
 import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact,
+    IonApp,
+    IonIcon,
+    IonLabel,
+    IonRouterOutlet,
+    IonTabBar,
+    IonTabButton,
+    IonTabs,
+    setupIonicReact,
 } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
-import { useProskomma } from "proskomma-react-hooks";
+import {IonReactRouter} from "@ionic/react-router";
+import {useProskomma} from "proskomma-react-hooks";
 import {
-  albumsOutline,
-  readerOutline,
-  book,
-  diamond,
-  search,
+    albumsOutline,
+    readerOutline,
+    book,
+    diamond,
+    search,
 } from "ionicons/icons";
 import Versions from "./pages/Versions/Versions";
 import BrowseBook from "./pages/BrowseBook/BrowseBook";
@@ -25,7 +25,7 @@ import BrowseChapter from "./pages/BrowseChapter/BrowseChapter";
 import BrowseVerse from "./pages/BrowseVerse/BrowseVerse";
 import Search from "./pages/Search/Search";
 import doFetch from "./lib/doFetch";
-import { useCatalog } from "proskomma-react-hooks";
+import {useCatalog} from "proskomma-react-hooks";
 
 import "./App.css";
 
@@ -47,132 +47,132 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-import { useState } from "react";
+import {useState} from "react";
 
 setupIonicReact();
 
 const App = () => {
-  const verbose = true;
-  const pkState = useProskomma({ verbose });
-  const initialState = {
-    docSetId: "xyz-eng_webbe",
-    bookCode: "GAL",
-    chapter: "1",
-    verse: "1",
-  };
+    const verbose = true;
+    const pkState = useProskomma({verbose});
+    const initialState = {
+        docSetId: "xyz-eng_webbe",
+        bookCode: "GAL",
+        chapter: "1",
+        verse: "1",
+    };
 
-  const { catalog, error:catalogError } = useCatalog({
-    proskomma: pkState.proskomma,
-    stateId: pkState.stateId,
-    verbose: true,
-  });
+    const {catalog, error: catalogError} = useCatalog({
+        proskomma: pkState.proskomma,
+        stateId: pkState.stateId,
+        verbose: true,
+    });
 
-  const [navState, setNavState] = useState(initialState);
+    const [navState, setNavState] = useState(initialState);
 
-  const onLoaded = useCallback(() => {
-    pkState.newStateId();
-  }, []);
+    const onLoaded = useCallback(() => {
+        pkState.newStateId();
+    }, []);
 
-  useEffect(() => {
-    doFetch(pkState, onLoaded);
-  }, []);
+    useEffect(() => {
+        doFetch(pkState, onLoaded);
+    }, []);
 
-  return (
-    <IonApp>
-      <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route path="/versions">
-              <Versions
-                catalogError={catalogError}
-                catalog={catalog}
-                pkState={pkState}
-                navState={navState}
-                setNavState={setNavState}
-              />
-            </Route>
-            <Route path="/browseBook">
-              <BrowseBook
-                catalog={catalog}
-                navState={navState}
-                setNavState={setNavState}
-                pkState={pkState}
-              />
-            </Route>
-            <Route path="/browseChapter">
-              <BrowseChapter
-                catalog={catalog}
-                pkState={pkState}
-                navState={navState}
-                setNavState={setNavState}
-              />
-            </Route>
-            <Route path="/browseVerse">
-              <BrowseVerse
-                catalog={catalog}
-                pkState={pkState}
-                navState={navState}
-                setNavState={setNavState}
-              />
-            </Route>
-            <Route path="/search">
-              <Search
-                catalog={catalog}
-                pkState={pkState}
-                navState={navState}
-                setNavState={setNavState}
-              />
-            </Route>
-            <Route exact path="/">
-              <Redirect to="/versions" />
-            </Route>
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton
-              tab="versions"
-              href="/versions"
-              data-test-id="tab-bar-button-tab3"
-            >
-              <IonIcon icon={albumsOutline} />
-              <IonLabel>Versions</IonLabel>
-            </IonTabButton>
-            <IonTabButton
-              tab="browseBook"
-              href="/browseBook"
-              data-test-id="tab-bar-button-tab3"
-            >
-              <IonIcon icon={book} />
-              <IonLabel>Book</IonLabel>
-            </IonTabButton>
-            <IonTabButton
-              tab="browseChapter"
-              href="/browseChapter"
-              data-test-id="tab-bar-button-tab3"
-            >
-              <IonIcon icon={readerOutline} />
-              <IonLabel>Chapter</IonLabel>
-            </IonTabButton>
-            <IonTabButton
-              tab="browseVerse"
-              href="/browseVerse"
-              data-test-id="tab-bar-button-tab3"
-            >
-              <IonIcon icon={diamond} />
-              <IonLabel>Verse</IonLabel>
-            </IonTabButton>
-            <IonTabButton
-              tab="search"
-              href="/search"
-              data-test-id="tab-bar-button-tab3"
-            >
-              <IonIcon icon={search} />
-              <IonLabel>Search</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      </IonReactRouter>
-    </IonApp>
-  );
+    return (
+        <IonApp>
+            <IonReactRouter>
+                <IonTabs>
+                    <IonRouterOutlet>
+                        <Route path="/versions">
+                            <Versions
+                                catalogError={catalogError}
+                                catalog={catalog}
+                                pkState={pkState}
+                                navState={navState}
+                                setNavState={setNavState}
+                            />
+                        </Route>
+                        <Route path="/browseBook">
+                            <BrowseBook
+                                catalog={catalog}
+                                navState={navState}
+                                setNavState={setNavState}
+                                pkState={pkState}
+                            />
+                        </Route>
+                        <Route path="/browseChapter">
+                            <BrowseChapter
+                                catalog={catalog}
+                                pkState={pkState}
+                                navState={navState}
+                                setNavState={setNavState}
+                            />
+                        </Route>
+                        <Route path="/browseVerse">
+                            <BrowseVerse
+                                catalog={catalog}
+                                pkState={pkState}
+                                navState={navState}
+                                setNavState={setNavState}
+                            />
+                        </Route>
+                        <Route path="/search">
+                            <Search
+                                catalog={catalog}
+                                pkState={pkState}
+                                navState={navState}
+                                setNavState={setNavState}
+                            />
+                        </Route>
+                        <Route exact path="/">
+                            <Redirect to="/versions"/>
+                        </Route>
+                    </IonRouterOutlet>
+                    <IonTabBar slot="bottom">
+                        <IonTabButton
+                            tab="versions"
+                            href="/versions"
+                            data-test-id="tab-bar-button-tab3"
+                        >
+                            <IonIcon icon={albumsOutline}/>
+                            <IonLabel>Versions</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton
+                            tab="browseBook"
+                            href="/browseBook"
+                            data-test-id="tab-bar-button-tab3"
+                        >
+                            <IonIcon icon={book}/>
+                            <IonLabel>Book</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton
+                            tab="browseChapter"
+                            href="/browseChapter"
+                            data-test-id="tab-bar-button-tab3"
+                        >
+                            <IonIcon icon={readerOutline}/>
+                            <IonLabel>Chapter</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton
+                            tab="browseVerse"
+                            href="/browseVerse"
+                            data-test-id="tab-bar-button-tab3"
+                        >
+                            <IonIcon icon={diamond}/>
+                            <IonLabel>Verse</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton
+                            tab="search"
+                            href="/search"
+                            data-test-id="tab-bar-button-tab3"
+                        >
+                            <IonIcon icon={search}/>
+                            <IonLabel>Search</IonLabel>
+                        </IonTabButton>
+                    </IonTabBar>
+                </IonTabs>
+            </IonReactRouter>
+        </IonApp>
+    );
 };
 
 export default App;
