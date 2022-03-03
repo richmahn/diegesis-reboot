@@ -6,14 +6,20 @@ const BookDropDown = ({ navState, setNavState, catalog }) => {
     useEffect(() => {
         if (catalog?.docSets && navState?.docSetId) {
             //find document in catalog using current bible ie navState.docSetId
-            const findDoc = (doc) => doc.id === navState.docSetId;
-            const bible = catalog?.docSets.find(findDoc);
+            const findBible = (doc) => doc.id === navState.docSetId;
+            const bible = catalog?.docSets.find(findBible);
             setDocuments(bible?.documents ?? []);
+            //Get book, as a fallback take the first book of the selected Bible
+            const book =
+                bible?.documents.find((doc) => doc.bookCode === navState.bookCode) ??
+                bible?.documents[0];
+            if (book && book.bookCode !== navState.bookCode) {
+                setNavState((prevState) => ({ ...prevState, bookCode: book.bookCode }));
+            }
         }
-    }, [catalog?.docSets]);
+    }, [catalog?.docSets, navState.docSetId]);
     const setBook = (e) => {
-        const doc = documents.find((doc) => doc.bookCode === e.detail.value);
-        setNavState((prevState) => ({ ...prevState, bookCode: e.detail.value, docId: doc.id }));
+        setNavState((prevState) => ({ ...prevState, bookCode: e.detail.value }));
     };
 
     return (

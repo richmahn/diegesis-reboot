@@ -50,7 +50,6 @@ const App = () => {
     const pkState = useProskomma({ verbose });
     const initialState = {
         docSetId: 'xyz-eng_emtv',
-        docId: 'MzYzOTQ0M2Qt',
         bookCode: 'GAL',
         chapter: '1',
         verse: '1',

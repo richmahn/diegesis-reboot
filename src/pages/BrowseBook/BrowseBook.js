@@ -10,34 +10,37 @@ export default function BrowseBook({ pkState, navState, setNavState, catalog }) 
     const [renderedSequence, setRenderedSequence] = useState(null);
 
     useEffect(() => {
-        console.log("In BrowseBook useEffect, docSetId=", navState.docSetId, "docId=", navState.docId)
-        if (navState.docId && navState.docSetId) {
+        if (navState.docSetId && catalog?.docSets) {
             const doRender = async () => {
-                console.log("   In doRender, docSetId=", navState.docSetId, "docId=", navState.docId)
                 const config = {
                     rendered: [],
                     versesCallback: () => {},
                     chapter: navState.chapter,
                     verse: navState.verse,
                 };
-                const resData = await ScriptureParaModelQuery(
-                    pkState.proskomma,
-                    [navState.docSetId],
-                    [navState.docId]
-                );
-                const model = new ScriptureParaModel(resData, config);
-                const docSetModel = new ScriptureDocSet(resData, model.context, config);
-                docSetModel.addDocumentModel(
-                    'default',
-                    new BrowseDocumentModel(resData, model.context, config)
-                );
-                model.addDocSetModel('default', docSetModel);
-                model.render();
-                setRenderedSequence(config.rendered);
+                const findBible = (doc) => doc.id === navState.docSetId;
+                const bible = catalog?.docSets.find(findBible);
+                const book = bible?.documents.find((doc) => doc.bookCode === navState.bookCode);
+                if (book) {
+                    const resData = await ScriptureParaModelQuery(
+                        pkState.proskomma,
+                        [navState.docSetId],
+                        [book.id]
+                    );
+                    const model = new ScriptureParaModel(resData, config);
+                    const docSetModel = new ScriptureDocSet(resData, model.context, config);
+                    docSetModel.addDocumentModel(
+                        'default',
+                        new BrowseDocumentModel(resData, model.context, config)
+                    );
+                    model.addDocSetModel('default', docSetModel);
+                    model.render();
+                    setRenderedSequence(config.rendered);
+                }
             };
             doRender().then();
         }
-    }, [pkState.stateId, navState.docSetId, navState.docId]);
+    }, [pkState.stateId, navState.docSetId, navState.bookCode, catalog?.docSets]);
     return (
         <IonPage>
             <PageHeader
