@@ -41,7 +41,7 @@ const addActions = (dInstance) => {
                     .map(s => [s.split('/')[3], s.split('/')[5]]);
                 const state = {newSearchString: data.payload};
                 attScopes.forEach(s => state[s[0] = s[1]])
-            renderer.config.blockStack.push(
+                renderer.config.blockStack.push(
                     <Link
                         to={{
                             pathname: "/search/text",
@@ -52,7 +52,7 @@ const addActions = (dInstance) => {
                     >
                         {data.payload}
                     </Link>
-            );
+                );
             } else {
                 renderer.config.blockStack.push(data.payload);
             }

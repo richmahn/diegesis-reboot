@@ -1,5 +1,24 @@
-.verse { padding-right: 0.2em; font-weight: bold; font-size: x-small; vertical-align: text-top;}
-p.q span.verse { padding-right: 2em;}
-p.q span.c1 { margin-left: 2em;}
-p.q2 { text-indent: 3em; margin-top: 0.1em; margin-bottom: 0.1em;}
-p.q { margin-bottom: 0.1em;}
+.verse {
+    padding-right: 0.2em;
+    font-weight: bold;
+    font-size: x-small;
+    vertical-align: text-top;
+}
+
+p.q span.verse {
+    padding-right: 2em;
+}
+
+p.q span.c1 {
+    margin-left: 2em;
+}
+
+p.q2 {
+    text-indent: 3em;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+}
+
+p.q {
+    margin-bottom: 0.1em;
+}

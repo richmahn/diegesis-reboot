@@ -13,7 +13,7 @@ export default function BrowseBook({pkState, navState, setNavState}) {
             const doRender = async () => {
                 const config = {
                     rendered: [],
-                    versesCallback: ( () => {
+                    versesCallback: (() => {
                     }),
                     chapter: navState.chapter,
                     verse: navState.verse,
