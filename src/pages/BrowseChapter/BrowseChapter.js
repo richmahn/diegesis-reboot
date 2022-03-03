@@ -38,7 +38,7 @@ export default function BrowseChapter({ pkState, navState, setNavState }) {
 
     const renderParagraphContents = b => b.items.map((i, n) => {
         if (i.type === 'token') {
-            return <span className={'c' + n}>{i.payload}</span>;
+            return <span className={'c' + n} key={n}>{i.payload}</span>;
         } else if (i.type === 'scope' && i.subType === 'start' && i.payload.startsWith('verses/')) {
             return <span className='verse' key={n}>{i.payload.split('/')[1]}</span>;
         }
