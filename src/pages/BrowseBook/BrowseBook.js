@@ -10,8 +10,10 @@ export default function BrowseBook({ pkState, navState, setNavState, catalog }) 
     const [renderedSequence, setRenderedSequence] = useState(null);
 
     useEffect(() => {
+        console.log("In BrowseBook useEffect, docSetId=", navState.docSetId, "docId=", navState.docId)
         if (navState.docId && navState.docSetId) {
             const doRender = async () => {
+                console.log("   In doRender, docSetId=", navState.docSetId, "docId=", navState.docId)
                 const config = {
                     rendered: [],
                     versesCallback: () => {},
