@@ -124,7 +124,7 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                     <IonRow>
                         <IonCol>
                             <IonList>
-                                <IonItem>  
+                                <IonItem>
                                     <IonLabel>Bible Name:</IonLabel>
                                     <IonInput onChange={(val)=>{setBibleName(val.target.value); setUserTypedBibleName(true)}} value={bibleName} />
                                 </IonItem>
@@ -138,11 +138,16 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                             </IonList>                        
                         </IonCol>
                     </IonRow>
-                    <IonRow>
+                    {bibleHtml && <IonRow>
+                        <IonCol>
+                            <a href="http://localhost:8088/html/bible.html" target="_blank" rel="noreferrer">View HTML</a>
+                        </IonCol>
+                    </IonRow>}
+                    {bibleHtml && <IonRow>
                         <IonCol>
                             <div className="Container" dangerouslySetInnerHTML={{__html: bibleHtml}}></div>    
                         </IonCol>
-                    </IonRow>
+                    </IonRow>}
                 </IonGrid>
             </IonContent>
         </IonPage>
