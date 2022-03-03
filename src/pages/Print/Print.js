@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import axios from 'axios';
 import {Buffer} from 'buffer';
-import {IonCol, IonContent, IonGrid, IonPage, IonRow} from "@ionic/react";
+import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonInput, IonItemDivider} from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import {ScriptureParaModel, ScriptureParaModelQuery} from "proskomma-render";
 import MainDocSet from './MainDocSet';
@@ -12,49 +12,52 @@ export default function Print({pkState, navState, setNavState, catalog}) {
 
     const [bibleHtml, setBibleHtml] = useState(null);
 
+    const [queryJson, setQueryJson] = useState(null);
+    const [bibleName, setBibleName] = useState(navState.docSetId);
+    const [userTypedBibleName, setUserTypedBibleName] = useState(false);
+    const [bibleBooks, setBibleBooks] = useState([]);
+    const [bibleBookOptions, setBibleBookOptions] = useState([]);
+
+    useEffect(() => {
+        if (! userTypedBibleName) {
+            setBibleName(navState.docSetId);
+        }
+    }, [navState.docSetId, userTypedBibleName])
+
+    useEffect(() => {
+            const doQuery = async () => {
+                const query = await ScriptureParaModelQuery(pkState.proskomma, [navState.docSetId])
+                setQueryJson(query);
+                // setBibleBooks(query.docSets[0].documents.map(doc => doc.idParts.parts[0]));
+                setBibleBookOptions(query.docSets[0].documents.map(doc => <IonSelectOption key={doc.id} value={doc.idParts.parts[0]} selected={bibleBooks.includes(doc.idParts.parts[0])}>{doc.headers[3].value}</IonSelectOption>));
+            }
+            if (pkState.proskomma && navState.docSetId && catalog.docSets && catalog.docSets.length) {
+                doQuery().then();
+            }        
+    }, [pkState.proskomma, catalog.docSets, navState.docSetId]);
+
     useEffect(
         () => {
-            const config = {
+            const doRender = async () => {             
+                const config = {
                     "bookOutput": {},
-                    "title": "unfoldingWord Literal Translation",
+                    "title": bibleName,
                     "language": "en",
                     "textDirection": "ltr",
                     "uid": "ULT",
-                    "bookSources": [
-                        "MAT",
-                        "MRK",
-                        "LUK",
-                        "JHN"
-                    ],
+                    "bookSources": bibleBooks,
                     "peripheralSources": [],
                     "structure": [
                         [
                             "section",
                             "nt",
-                            [
-                                [
-                                    "bookCode",
-                                    "MAT"
-                                ],
-                                [
-                                    "bookCode",
-                                    "MRK"
-                                ],
-                                [
-                                    "bookCode",
-                                    "LUK"
-                                ],
-                                [
-                                    "bookCode",
-                                    "JHN"
-                                ]
-                            ]
+                            bibleBooks.map(book=>["bookCode", book]),
                         ]
                     ],
                     "i18n": {
                         "notes": "Notes",
                         "tocBooks": "Books of the Bible",
-                        "titlePage": "unfoldingWord Literal Translation: Psalms and Gospels",
+                        "titlePage": bibleName+ ": " + queryJson.docSets[0].documents.filter(doc => bibleBooks.includes(doc.idParts.parts[0])).map(doc => doc.headers[3].value).join(", "),
                         "copyright": "Licensed under a Creative Commons Attribution-Sharealike 4.0 International License",
                         "coverAlt": "Cover",
                         "preface": "Preface",
@@ -62,18 +65,17 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                         "nt": "New Testament"
                     }
                 };
-            const doRender = async () => {
-                const queryJson = await ScriptureParaModelQuery(pkState.proskomma, [navState.docSetId]);
+                console.log("Config:", config);
                 const model = new ScriptureParaModel(queryJson, config);
                 model.addDocSetModel('default', new MainDocSet(queryJson, model.context, config));
                 model.render();
                 setBibleHtml(config.output);
             }
-            if (catalog.docSets) {
+            if (queryJson && bibleBooks.length > 0 && bibleName) {
                 doRender().then();
             }
         },
-        [pkState.proskomma, catalog.docSets, navState.docSetId]
+        [queryJson, bibleName, bibleBooks]
     );
 
     useEffect(
@@ -100,7 +102,7 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                         }
                     ).then(res => {
                         console.log(String.fromCharCode.apply(null, new Uint8Array(res.data)));
-                        setBibleHtml(null);
+                        //setBibleHtml(null);
                     })
                 }
                 doPost().then();
@@ -121,7 +123,24 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                 <IonGrid>
                     <IonRow>
                         <IonCol>
-                            <a href="http://localhost:8088/html/bible.html" target="_blank" rel="noreferrer">Show Me My HTML!</a>
+                            <IonList>
+                                <IonItem>  
+                                    <IonLabel>Bible Name:</IonLabel>
+                                    <IonInput onChange={(val)=>{setBibleName(val.target.value); setUserTypedBibleName(true)}} value={bibleName} />
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel>Books</IonLabel>
+                                        <IonSelect value={bibleBooks} multiple={true} cancelText="Cancel" okText="Set" onIonChange={e => setBibleBooks(e.detail.value)}>
+                                            {bibleBookOptions}
+                                        </IonSelect>
+                                </IonItem>
+                                <IonItemDivider>Selected Books: {bibleBooks.length > 0 ? bibleBooks.join(', ') : '(none selected)'}</IonItemDivider>
+                            </IonList>                        
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <div className="Container" dangerouslySetInnerHTML={{__html: bibleHtml}}></div>    
                         </IonCol>
                     </IonRow>
                 </IonGrid>

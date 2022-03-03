@@ -34,3 +34,7 @@
 .usfm_q2 {
     padding-left: 2em;
 }
+
+#toc_ul li.leader::after {
+    width: auto !important;
+}
