@@ -13,12 +13,12 @@ import {
 import {IonReactRouter} from "@ionic/react-router";
 import {useProskomma} from "proskomma-react-hooks";
 import {
-    albumsOutline,
-    readerOutline,
-    bookOutline,
+    albums,
+    reader,
+    book,
     diamond,
     search,
-    printOutline,
+    print,
 } from "ionicons/icons";
 import Versions from "./pages/Versions/Versions";
 import BrowseBook from "./pages/BrowseBook/BrowseBook";
@@ -142,7 +142,7 @@ const App = () => {
                             href="/versions"
                             data-test-id="tab-bar-button-tab1"
                         >
-                            <IonIcon icon={albumsOutline} />
+                            <IonIcon icon={albums} />
                             <IonLabel>Versions</IonLabel>
                         </IonTabButton>
                         <IonTabButton
@@ -150,7 +150,7 @@ const App = () => {
                             href="/browseBook"
                             data-test-id="tab-bar-button-tab2"
                         >
-                            <IonIcon icon={bookOutline} />
+                            <IonIcon icon={book} />
                             <IonLabel>Book</IonLabel>
                         </IonTabButton>
                         <IonTabButton
@@ -158,7 +158,7 @@ const App = () => {
                             href="/browseChapter"
                             data-test-id="tab-bar-button-tab3"
                         >
-                            <IonIcon icon={readerOutline} />
+                            <IonIcon icon={reader} />
                             <IonLabel>Chapter</IonLabel>
                         </IonTabButton>
                         <IonTabButton
@@ -173,6 +173,7 @@ const App = () => {
                             tab="search"
                             href="/search"
                             data-test-id="tab-bar-button-tab5"
+                            disabled={true}
                         >
                             <IonIcon icon={search} />
                             <IonLabel>Search</IonLabel>
@@ -182,7 +183,7 @@ const App = () => {
                             href="/print"
                             data-test-id="tab-bar-button-tab6"
                         >
-                            <IonIcon icon={printOutline} />
+                            <IonIcon icon={print} />
                             <IonLabel>Print</IonLabel>
                         </IonTabButton>
                     </IonTabBar>
