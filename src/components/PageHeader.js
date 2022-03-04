@@ -19,7 +19,7 @@ export default function PageHeader({ title, navState, setNavState, catalog }) {
                 <IonGrid>
                     <IonRow>
                         <IonCol>
-                            <IonTitle size="large">{title}</IonTitle>
+                            <IonTitle size="large">{title} - Diegesis Reboot</IonTitle>
                         </IonCol>
                     </IonRow>
                     <IonRow>

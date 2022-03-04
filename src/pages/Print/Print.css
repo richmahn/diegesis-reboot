@@ -46,7 +46,7 @@
 @media screen {
     .pagedjs_page {
         box-shadow: 10px 12px 30px 0 rgba(0, 0, 0, 0.1);
-        float: left; 
+        float: left;
 
         size: 210mm 297mm;
     margin-top: 0;
@@ -242,9 +242,13 @@ div.periphBody {
 .verses {font-size: 7pt; font-weight: bold}
 
 #print-icon {
-    float: right;
 }
 
 .chapN {
     display: none;
+}
+
+.printBookSelect {
+    max-width: 100% !important;
+    width: 100% !important;
 }

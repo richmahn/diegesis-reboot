@@ -2,7 +2,22 @@ import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import axios from 'axios';
 import {Buffer} from 'buffer';
-import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonInput, IonIcon} from "@ionic/react";
+import {
+    IonCol,
+    IonContent,
+    IonGrid,
+    IonPage,
+    IonRow,
+    IonItem,
+    IonLabel,
+    IonSelect,
+    IonSelectOption,
+    IonInput,
+    IonIcon,
+    IonButton,
+    IonTitle,
+    IonText,
+} from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import {ScriptureParaModel, ScriptureParaModelQuery} from "proskomma-render";
 import MainDocSet from './MainDocSet';
@@ -17,24 +32,36 @@ export default function Print({pkState, navState, setNavState, catalog}) {
     const [userTypedBibleName, setUserTypedBibleName] = useState(false);
     const [bibleBooks, setBibleBooks] = useState([]);
     const [bibleBookOptions, setBibleBookOptions] = useState([]);
+    const [flowPages, setFlowPages] = useState(0);
     const previewer = new Previewer();
 
     useEffect(() => {
-        if (! userTypedBibleName) {
+        if (!userTypedBibleName) {
             setBibleName(navState.docSetId);
         }
     }, [navState.docSetId, userTypedBibleName])
 
     useEffect(() => {
-            const doQuery = async () => {
-                const query = await ScriptureParaModelQuery(pkState.proskomma, [navState.docSetId])
-                setQueryJson(query);
-                // setBibleBooks(query.docSets[0].documents.map(doc => doc.idParts.parts[0]));
-                setBibleBookOptions(query.docSets[0].documents.map(doc => <IonSelectOption key={doc.id} value={doc.idParts.parts[0]} selected={bibleBooks.includes(doc.idParts.parts[0])}>{doc.headers[3].value}</IonSelectOption>));
-            }
-            if (pkState.proskomma && navState.docSetId && catalog.docSets && catalog.docSets.length) {
-                doQuery().then();
-            }
+        const doQuery = async () => {
+            setBibleName(navState.docSetId);
+            const query = await ScriptureParaModelQuery(pkState.proskomma, [navState.docSetId])
+            setQueryJson(query);
+            setBibleBookOptions(
+                query.docSets[0].documents
+                    .map(
+                        doc => <IonSelectOption
+                            key={doc.id}
+                            value={doc.idParts.parts[0]}
+                            selected={bibleBooks.includes(doc.idParts.parts[0])}
+                        >
+                            <IonLabel>{doc.idParts.parts[0]}</IonLabel>
+                        </IonSelectOption>
+                    )
+            );
+        }
+        if (pkState.proskomma && navState.docSetId && catalog.docSets && catalog.docSets.length) {
+            doQuery().then();
+        }
     }, [pkState.proskomma, catalog.docSets, navState.docSetId], bibleBooks);
 
     useEffect(
@@ -51,38 +78,38 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                     "structure": [
                         [
                             "section",
-                            "nt",
-                            bibleBooks.map(book=>["bookCode", book]),
+                            "canonical",
+                            bibleBooks.map(book => ["bookCode", book]),
                         ]
                     ],
                     "i18n": {
                         "notes": "Notes",
-                        "tocBooks": "Books of the Bible",
+                        "tocBooks": "Content",
                         "titlePage": bibleName,
                         "copyright": "Licensed under a Creative Commons Attribution-Sharealike 4.0 International License",
                         "coverAlt": "Cover",
                         "preface": "Preface",
                         "ot": "Old Testament",
-                        "nt": "New Testament"
+                        "nt": "New Testament",
+                        "canonical": "Books of the Bible"
                     }
                 };
-                console.log("Config:", config);
                 const model = new ScriptureParaModel(queryJson, config);
                 model.addDocSetModel('default', new MainDocSet(queryJson, model.context, config));
                 model.render();
                 setBibleHtml(config.output);
                 document.querySelector("#preview").innerHTML = "";
-                previewer.
-                    preview(
-                        config.output,
-                        ["Print.css"],
-                        document.querySelector("#preview")
-                    ).
-                    then(flow => {
-                        console.log("preview rendered, total pages", flow.total, { flow });
-                    });
+                previewer.preview(
+                    config.output,
+                    ["Print.css"],
+                    document.querySelector("#preview")
+                ).then(flow => {
+                    console.log("preview rendered, total pages", flow.total);
+                    setFlowPages(flow.total);
+                });
             }
             if (queryJson && bibleBooks.length > 0 && bibleName) {
+                setFlowPages(0);
                 doRender().then();
             }
         },
@@ -92,7 +119,6 @@ export default function Print({pkState, navState, setNavState, catalog}) {
     useEffect(
         () => {
             if (bibleHtml) {
-                console.log("POST Bible HTML");
                 const doPost = async () => {
                     const axiosInstance = axios.create({});
                     axiosInstance.defaults.headers = {
@@ -113,7 +139,6 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                         }
                     ).then(res => {
                         console.log(String.fromCharCode.apply(null, new Uint8Array(res.data)));
-                        //setBibleHtml(null);
                     })
                 }
                 doPost().then();
@@ -134,23 +159,84 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                 <IonGrid>
                     <IonRow>
                         <IonCol>
-                            <IonList>
-                                <IonItem>
-                                    <IonLabel>Bible Name:</IonLabel>
-                                    <IonInput onIonBlur={e => {setBibleName(e.target.value); setUserTypedBibleName(true)}} value={bibleName} />
-                                </IonItem>
-                                <IonItem>
-                                    <IonLabel>Books</IonLabel>
-                                    <IonSelect value={bibleBooks} multiple={true} cancelText="Cancel" okText="Set" onIonChange={e => setBibleBooks(e.detail.value)}>
-                                        {bibleBookOptions}
-                                    </IonSelect>
-                                </IonItem>
-                            </IonList>
+                            <IonItem>
+                                <IonLabel>Bible Name:</IonLabel>
+                                <IonInput
+                                    onIonBlur={
+                                        e => {
+                                            setBibleName(e.target.value);
+                                            setUserTypedBibleName(true);
+                                        }
+                                    }
+                                    value={bibleName}
+                                />
+                            </IonItem>
                         </IonCol>
                     </IonRow>
-                    {bibleHtml && <IonRow>
+                    <IonRow>
+                        <IonCol size={10}>
+                            <IonItem>
+                                <IonLabel>Select One or More Books</IonLabel>
+                                <IonSelect
+                                    class="printBookSelect"
+                                    placeHolder="Select Books to Render"
+                                    value={bibleBooks}
+                                    multiple={true}
+                                    cancelText="Cancel"
+                                    okText="Set"
+                                    onIonChange={e => setBibleBooks(e.detail.value)}
+                                    disabled={bibleBookOptions.length === 0}
+                                >
+                                    {bibleBookOptions}
+                                </IonSelect>
+                            </IonItem>
+                        </IonCol>
+                        <IonCol size={1}>
+                            <IonButton
+                                color="secondary"
+                                size="small"
+                                onClick={
+                                    () => {
+                                        setBibleBooks(queryJson.docSets[0].documents.map(d => d.idParts.parts[0]));
+                                    }
+                                }
+                                disabled={bibleBookOptions.length === 0}
+                            >
+                                All Books
+                            </IonButton>
+                        </IonCol>
+                        <IonCol size={1}>
+                            <IonButton
+                                color="secondary"
+                                size="small"
+                                class="ion-float-right"
+                                onClick={
+                                    () => {
+                                        setBibleBooks([]);
+                                        document.querySelector("#preview").innerHTML = ""
+                                    }
+                                }
+                                disabled={bibleBookOptions.length === 0}
+                            >
+                                No Books
+                            </IonButton>
+                        </IonCol>
+                    </IonRow>
+                    {bibleBooks.length > 0 && bibleHtml && <IonRow>
                         <IonCol>
-                            <a id="print-icon" href="http://localhost:8088/html/bible.html" target="_blank" rel="noreferrer"><IonIcon size="large" title="Open HTML" icon={printOutline} /></a>
+                            <IonTitle>{flowPages === 0 ? "Rendering..." : `${flowPages} pages rendered`}</IonTitle>
+                        </IonCol>
+                        <IonCol>
+                            <IonText class="ion-float-right">
+                                {flowPages > 0 && <a
+                                    id="print-icon"
+                                    href="http://localhost:8088/html/bible.html"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    <IonIcon size="large" title="Open HTML" icon={printOutline} />
+                                </a>}
+                            </IonText>
                         </IonCol>
                     </IonRow>}
                     <IonRow>
