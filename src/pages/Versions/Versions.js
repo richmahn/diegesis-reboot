@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {IonAccordion, IonAccordionGroup, IonCol, IonContent, IonGrid, IonPage, IonRow, IonItem, IonLabel, IonList} from "@ionic/react";
+import {IonAccordion, IonAccordionGroup, IonCol, IonContent, IonGrid, IonPage, IonRow, IonItem, IonLabel, IonList, IonTitle} from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import PkErrors from "../../components/PkErrors";
 import "./Versions.css";
@@ -36,6 +36,11 @@ export default function Versions({navState, setNavState, catalog, catalogErrors}
             />
             <IonContent fullscreen>
                 <IonGrid>
+                    <IonRow>
+                        <IonCol>
+                            <IonTitle>{`${catalog.nDocuments} Bible Books in ${catalog.nDocSets} Bibles`}</IonTitle>
+                        </IonCol>
+                    </IonRow>
                     <IonRow>
                         <IonCol>
                             <IonAccordionGroup expand="inset" value={navState.docSetId}>
