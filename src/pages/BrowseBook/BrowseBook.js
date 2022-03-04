@@ -14,10 +14,7 @@ export default function BrowseBook({ pkState, navState, setNavState, catalog }) 
             const doRender = async () => {
                 const config = {
                     rendered: [],
-                    versesCallback: () => {},
-                    chapter: navState.chapter,
-                    verse: navState.verse,
-                };
+                 };
                 const findBible = (doc) => doc.id === navState.docSetId;
                 const bible = catalog?.docSets.find(findBible);
                 const book = bible?.documents.find((doc) => doc.bookCode === navState.bookCode);
