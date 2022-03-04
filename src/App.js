@@ -9,17 +9,25 @@ import {
     IonTabButton,
     IonTabs,
     setupIonicReact,
-} from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import { useProskomma } from 'proskomma-react-hooks';
-import { albumsOutline, readerOutline, bookOutline, diamond, search } from 'ionicons/icons';
-import Versions from './pages/Versions/Versions';
-import BrowseBook from './pages/BrowseBook/BrowseBook';
-import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
-import BrowseVerse from './pages/BrowseVerse/BrowseVerse';
-import Search from './pages/Search/Search';
-import doFetch from './lib/doFetch';
-import { useCatalog } from 'proskomma-react-hooks';
+} from "@ionic/react";
+import {IonReactRouter} from "@ionic/react-router";
+import {useProskomma} from "proskomma-react-hooks";
+import {
+    albumsOutline,
+    readerOutline,
+    bookOutline,
+    diamond,
+    search,
+    printOutline,
+} from "ionicons/icons";
+import Versions from "./pages/Versions/Versions";
+import BrowseBook from "./pages/BrowseBook/BrowseBook";
+import BrowseChapter from "./pages/BrowseChapter/BrowseChapter";
+import BrowseVerse from "./pages/BrowseVerse/BrowseVerse";
+import Search from "./pages/Search/Search";
+import Print from "./pages/Print/Print";
+import doFetch from "./lib/doFetch";
+import {useCatalog} from "proskomma-react-hooks";
 
 import './App.css';
 
@@ -116,7 +124,15 @@ const App = () => {
                                 setNavState={setNavState}
                             />
                         </Route>
-                        <Route exact path="/">
+                        <Route path="/print">
+                            <Print
+                                catalog={catalog}
+                                navState={navState}
+                                setNavState={setNavState}
+                                pkState={pkState}
+                            />
+                        </Route>
+                        <Route exact path="/" >
                             <Redirect to="/versions" />
                         </Route>
                     </IonRouterOutlet>
@@ -124,7 +140,7 @@ const App = () => {
                         <IonTabButton
                             tab="versions"
                             href="/versions"
-                            data-test-id="tab-bar-button-tab3"
+                            data-test-id="tab-bar-button-tab1"
                         >
                             <IonIcon icon={albumsOutline} />
                             <IonLabel>Versions</IonLabel>
@@ -132,7 +148,7 @@ const App = () => {
                         <IonTabButton
                             tab="browseBook"
                             href="/browseBook"
-                            data-test-id="tab-bar-button-tab3"
+                            data-test-id="tab-bar-button-tab2"
                         >
                             <IonIcon icon={bookOutline} />
                             <IonLabel>Book</IonLabel>
@@ -148,7 +164,7 @@ const App = () => {
                         <IonTabButton
                             tab="browseVerse"
                             href="/browseVerse"
-                            data-test-id="tab-bar-button-tab3"
+                            data-test-id="tab-bar-button-tab4"
                         >
                             <IonIcon icon={diamond} />
                             <IonLabel>Verse</IonLabel>
@@ -156,10 +172,18 @@ const App = () => {
                         <IonTabButton
                             tab="search"
                             href="/search"
-                            data-test-id="tab-bar-button-tab3"
+                            data-test-id="tab-bar-button-tab5"
                         >
                             <IonIcon icon={search} />
                             <IonLabel>Search</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton
+                            tab="print"
+                            href="/print"
+                            data-test-id="tab-bar-button-tab6"
+                        >
+                            <IonIcon icon={printOutline} />
+                            <IonLabel>Print</IonLabel>
                         </IonTabButton>
                     </IonTabBar>
                 </IonTabs>
