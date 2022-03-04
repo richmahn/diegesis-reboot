@@ -58,7 +58,7 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                     "i18n": {
                         "notes": "Notes",
                         "tocBooks": "Books of the Bible",
-                        "titlePage": bibleName+ ": " + queryJson.docSets[0].documents.filter(doc => bibleBooks.includes(doc.idParts.parts[0])).map(doc => doc.headers[3].value).join(", "),
+                        "titlePage": bibleName,
                         "copyright": "Licensed under a Creative Commons Attribution-Sharealike 4.0 International License",
                         "coverAlt": "Cover",
                         "preface": "Preface",
@@ -72,20 +72,15 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                 model.render();
                 setBibleHtml(config.output);
                 document.querySelector("#preview").innerHTML = "";
-                previewer
-      .preview(
-        config.output,
-        [],
-        document.querySelector("#preview")
-      )
-      .then(flow => {
-        console.log("preview rendered, total pages", flow.total, { flow });
-      });
-    return () => {
-      document.head
-        .querySelectorAll('[data-pagedjs-inserted-styles]')
-        .forEach((e) => e.parentNode?.removeChild(e))
-    }           
+                previewer.
+                    preview(
+                        config.output,
+                        ["Print.css"],
+                        document.querySelector("#preview")
+                    ).
+                    then(flow => {
+                        console.log("preview rendered, total pages", flow.total, { flow });
+                    });
             }
             if (queryJson && bibleBooks.length > 0 && bibleName) {
                 doRender().then();
@@ -130,7 +125,7 @@ export default function Print({pkState, navState, setNavState, catalog}) {
     return (
         <IonPage>
             <PageHeader
-                title="Print to PDF or Something Like That"
+                title="Print Preview / PDF"
                 navState={navState}
                 setNavState={setNavState}
                 catalog={catalog}
@@ -142,7 +137,7 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                             <IonList>
                                 <IonItem>
                                     <IonLabel>Bible Name:</IonLabel>
-                                    <IonInput onChange={(val)=>{setBibleName(val.target.value); setUserTypedBibleName(true)}} value={bibleName} />
+                                    <IonInput onIonBlur={e => {setBibleName(e.target.value); setUserTypedBibleName(true)}} value={bibleName} />
                                 </IonItem>
                                 <IonItem>
                                     <IonLabel>Books</IonLabel>
@@ -155,12 +150,13 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                     </IonRow>
                     {bibleHtml && <IonRow>
                         <IonCol>
-                            <a href="http://localhost:8088/html/bible.html" target="_blank" rel="noreferrer"><IonIcon size="large" title="Open HTML" icon={printOutline} /></a>
+                            <a id="print-icon" href="http://localhost:8088/html/bible.html" target="_blank" rel="noreferrer"><IonIcon size="large" title="Open HTML" icon={printOutline} /></a>
                         </IonCol>
                     </IonRow>}
                     <IonRow>
                         <IonCol>
-                          <div id="preview"></div>
+                            <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+                            <div id="preview"></div>
                         </IonCol>
                     </IonRow>
                 </IonGrid>
