@@ -2,21 +2,22 @@ import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import axios from 'axios';
 import {Buffer} from 'buffer';
-import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonInput, IonItemDivider} from "@ionic/react";
+import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonInput, IonIcon} from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import {ScriptureParaModel, ScriptureParaModelQuery} from "proskomma-render";
 import MainDocSet from './MainDocSet';
 import "./Print.css";
+import {Previewer} from "pagedjs";
+import {printOutline} from "ionicons/icons";
 
 export default function Print({pkState, navState, setNavState, catalog}) {
-
-    const [bibleHtml, setBibleHtml] = useState(null);
-
+    const [bibleHtml, setBibleHtml] = useState("");
     const [queryJson, setQueryJson] = useState(null);
     const [bibleName, setBibleName] = useState(navState.docSetId);
     const [userTypedBibleName, setUserTypedBibleName] = useState(false);
     const [bibleBooks, setBibleBooks] = useState([]);
     const [bibleBookOptions, setBibleBookOptions] = useState([]);
+    const previewer = new Previewer();
 
     useEffect(() => {
         if (! userTypedBibleName) {
@@ -33,12 +34,12 @@ export default function Print({pkState, navState, setNavState, catalog}) {
             }
             if (pkState.proskomma && navState.docSetId && catalog.docSets && catalog.docSets.length) {
                 doQuery().then();
-            }        
-    }, [pkState.proskomma, catalog.docSets, navState.docSetId]);
+            }
+    }, [pkState.proskomma, catalog.docSets, navState.docSetId], bibleBooks);
 
     useEffect(
         () => {
-            const doRender = async () => {             
+            const doRender = async () => {
                 const config = {
                     "bookOutput": {},
                     "title": bibleName,
@@ -70,6 +71,21 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                 model.addDocSetModel('default', new MainDocSet(queryJson, model.context, config));
                 model.render();
                 setBibleHtml(config.output);
+                document.querySelector("#preview").innerHTML = "";
+                previewer
+      .preview(
+        config.output,
+        [],
+        document.querySelector("#preview")
+      )
+      .then(flow => {
+        console.log("preview rendered, total pages", flow.total, { flow });
+      });
+    return () => {
+      document.head
+        .querySelectorAll('[data-pagedjs-inserted-styles]')
+        .forEach((e) => e.parentNode?.removeChild(e))
+    }           
             }
             if (queryJson && bibleBooks.length > 0 && bibleName) {
                 doRender().then();
@@ -130,24 +146,23 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                                 </IonItem>
                                 <IonItem>
                                     <IonLabel>Books</IonLabel>
-                                        <IonSelect value={bibleBooks} multiple={true} cancelText="Cancel" okText="Set" onIonChange={e => setBibleBooks(e.detail.value)}>
-                                            {bibleBookOptions}
-                                        </IonSelect>
+                                    <IonSelect value={bibleBooks} multiple={true} cancelText="Cancel" okText="Set" onIonChange={e => setBibleBooks(e.detail.value)}>
+                                        {bibleBookOptions}
+                                    </IonSelect>
                                 </IonItem>
-                                <IonItemDivider>Selected Books: {bibleBooks.length > 0 ? bibleBooks.join(', ') : '(none selected)'}</IonItemDivider>
-                            </IonList>                        
+                            </IonList>
                         </IonCol>
                     </IonRow>
                     {bibleHtml && <IonRow>
                         <IonCol>
-                            <a href="http://localhost:8088/html/bible.html" target="_blank" rel="noreferrer">View HTML</a>
+                            <a href="http://localhost:8088/html/bible.html" target="_blank" rel="noreferrer"><IonIcon size="large" title="Open HTML" icon={printOutline} /></a>
                         </IonCol>
                     </IonRow>}
-                    {bibleHtml && <IonRow>
+                    <IonRow>
                         <IonCol>
-                            <div className="Container" dangerouslySetInnerHTML={{__html: bibleHtml}}></div>    
+                          <div id="preview"></div>
                         </IonCol>
-                    </IonRow>}
+                    </IonRow>
                 </IonGrid>
             </IonContent>
         </IonPage>

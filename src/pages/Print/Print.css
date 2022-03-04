@@ -38,3 +38,15 @@
 #toc_ul li.leader::after {
     width: auto !important;
 }
+
+@media screen {
+    .pagedjs_page {
+        box-shadow: 10px 12px 30px 0 rgba(0, 0, 0, 0.1);
+        margin: 1rem;
+        float: left; 
+    }
+}
+
+body {
+    position: absolute;
+}
