@@ -24,7 +24,10 @@ const Navigation = ({ navState, setNavState, catalog }) => {
         />
       </IonCol>
       <IonCol size={3}>
-        <ChapterDropDown />
+        <ChapterDropDown 
+        navState={navState}
+        setNavState={setNavState}
+        />
       </IonCol>
       <IonCol size={3}>
         <VerseDropDown />

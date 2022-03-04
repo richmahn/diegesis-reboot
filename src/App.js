@@ -19,7 +19,7 @@ import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
 import BrowseVerse from './pages/BrowseVerse/BrowseVerse';
 import Search from './pages/Search/Search';
 import doFetch from './lib/doFetch';
-import { useCatalog } from 'proskomma-react-hooks';
+import { useCatalog, useQuery } from 'proskomma-react-hooks';
 
 import './App.css';
 
@@ -52,15 +52,46 @@ const App = () => {
         docSetId: 'xyz-eng_emtv',
         bookCode: 'GAL',
         chapter: '1',
+        chapters:[],
         verse: '1',
     };
+    const [navState, setNavState] = useState(initialState);
+
+    const getBBCQuery = (navState) => {
+        const query = '{' +
+            '  docSet(id:"%docSetId%") {' +
+            '    id' +
+            '    document(bookCode:"%bookCode%") {' +
+            '      cIndexes {chapter}' +
+            '    }' +
+            '  }' +
+            '}';
+        return query
+            .replace("%docSetId%", navState.docSetId)
+            .replace("%bookCode%", navState.bookCode)
+      };
+      
+    const queryState = useQuery({
+        ...pkState,
+        query: getBBCQuery(navState),
+        verbose: true,
+    });
 
     const { catalog, error: catalogError } = useCatalog({
         proskomma: pkState.proskomma,
         stateId: pkState.stateId,
         verbose: true,
     });
-    const [navState, setNavState] = useState(initialState);
+      
+ 
+    useEffect(() => {
+    const _chapters =  queryState?.data?.docSet?.document.cIndexes.map((a) => a.chapter)
+    if(!_chapters?.includes(navState.chapter)){
+        setNavState((prevState) => ({ ...prevState, chapter: '1', chapters:_chapters }));
+    }else(
+        setNavState((prevState) => ({ ...prevState, chapters:_chapters }))
+    )
+    },[queryState])
 
     const onLoaded = useCallback(() => {
         pkState.newStateId();
