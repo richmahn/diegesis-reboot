@@ -1,5 +1,5 @@
-import React, {useEffect, useCallback} from "react";
-import {Redirect, Route} from "react-router-dom";
+import React, { useEffect, useCallback } from 'react';
+import { Redirect, Route } from 'react-router-dom';
 import {
     IonApp,
     IonIcon,
@@ -9,64 +9,57 @@ import {
     IonTabButton,
     IonTabs,
     setupIonicReact,
-} from "@ionic/react";
-import {IonReactRouter} from "@ionic/react-router";
-import {useProskomma} from "proskomma-react-hooks";
-import {
-    albumsOutline,
-    readerOutline,
-    bookOutline,
-    diamond,
-    search,
-} from "ionicons/icons";
-import Versions from "./pages/Versions/Versions";
-import BrowseBook from "./pages/BrowseBook/BrowseBook";
-import BrowseChapter from "./pages/BrowseChapter/BrowseChapter";
-import BrowseVerse from "./pages/BrowseVerse/BrowseVerse";
-import Search from "./pages/Search/Search";
-import doFetch from "./lib/doFetch";
-import {useCatalog} from "proskomma-react-hooks";
+} from '@ionic/react';
+import { IonReactRouter } from '@ionic/react-router';
+import { useProskomma } from 'proskomma-react-hooks';
+import { albumsOutline, readerOutline, bookOutline, diamond, search } from 'ionicons/icons';
+import Versions from './pages/Versions/Versions';
+import BrowseBook from './pages/BrowseBook/BrowseBook';
+import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
+import BrowseVerse from './pages/BrowseVerse/BrowseVerse';
+import Search from './pages/Search/Search';
+import doFetch from './lib/doFetch';
+import { useCatalog } from 'proskomma-react-hooks';
 
-import "./App.css";
+import './App.css';
 
 /* Core CSS required for Ionic components to work properly */
-import "@ionic/react/css/core.css";
+import '@ionic/react/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-import "@ionic/react/css/normalize.css";
-import "@ionic/react/css/structure.css";
-import "@ionic/react/css/typography.css";
+import '@ionic/react/css/normalize.css';
+import '@ionic/react/css/structure.css';
+import '@ionic/react/css/typography.css';
 
 /* Optional CSS utils that can be commented out */
-import "@ionic/react/css/padding.css";
-import "@ionic/react/css/float-elements.css";
-import "@ionic/react/css/text-alignment.css";
-import "@ionic/react/css/text-transformation.css";
-import "@ionic/react/css/flex-utils.css";
-import "@ionic/react/css/display.css";
+import '@ionic/react/css/padding.css';
+import '@ionic/react/css/float-elements.css';
+import '@ionic/react/css/text-alignment.css';
+import '@ionic/react/css/text-transformation.css';
+import '@ionic/react/css/flex-utils.css';
+import '@ionic/react/css/display.css';
 
 /* Theme variables */
-import "./theme/variables.css";
-import {useState} from "react";
+import './theme/variables.css';
+import { useState } from 'react';
 
 setupIonicReact();
 
 const App = () => {
     const verbose = true;
-    const pkState = useProskomma({verbose});
+    const pkState = useProskomma({ verbose });
     const initialState = {
-        docSetId: "xyz-eng_webbe",
-        bookCode: "GAL",
-        chapter: "1",
-        verse: "1",
+        docSetId: 'xyz-eng_emtv',
+        bookCode: 'GAL',
+        chapter: '1',
+        verse: '1',
     };
 
-    const {catalog, error: catalogError} = useCatalog({
+    const { catalog, error: catalogError } = useCatalog({
         proskomma: pkState.proskomma,
         stateId: pkState.stateId,
         verbose: true,
     });
-
     const [navState, setNavState] = useState(initialState);
 
     const onLoaded = useCallback(() => {
@@ -123,11 +116,11 @@ const App = () => {
                                 setNavState={setNavState}
                             />
                         </Route>
-                        <Route exact path="/" >
+                        <Route exact path="/">
                             <Redirect to="/versions" />
                         </Route>
                     </IonRouterOutlet>
-                    <IonTabBar slot="bottom" >
+                    <IonTabBar slot="bottom">
                         <IonTabButton
                             tab="versions"
                             href="/versions"
