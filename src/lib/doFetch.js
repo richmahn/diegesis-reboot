@@ -12,7 +12,7 @@ export default async function doFetch(pkState) {
         {
             method: "get",
             responseType: 'text',
-            "url": `http://localhost:8088/archives/spa_archive.pkzip`,
+            "url": `http://localhost:8088/archives/4book_nt.pkzip`,
             "validateStatus": false,
         }
     )

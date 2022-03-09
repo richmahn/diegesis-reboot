@@ -18,7 +18,7 @@ export default function Versions({navState, setNavState, catalog, catalogErrors}
                             <IonLabel className="bookCodeLabel">Book Code: {d.bookCode}</IonLabel>
                             {d.m && <IonLabel className="secondaryLabel">Main Title: {d.mt}</IonLabel>}
                             {d.h && <IonLabel className="secondaryLabel">Header: {d.h}</IonLabel>}
-                            {d.toc1 && <IonLabel className="secondaryLabel">TOC 1: {d.toc1}</IonLabel>}
+                            {d.toc && <IonLabel className="secondaryLabel">TOC: {d.toc}</IonLabel>}
                             {d.toc2 && <IonLabel className="secondaryLabel">TOC 2: {d.toc2}</IonLabel>}
                             {d.toc3 && <IonLabel className="secondaryLabel">TOC 3: {d.toc3}</IonLabel>}
                         </div></IonItem>)}

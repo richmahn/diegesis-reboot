@@ -93,13 +93,13 @@ const App = () => {
 
 
     useEffect(() => {
-    const _chapters =  queryState?.data?.docSet?.document.cIndexes.map((a) => a.chapter)
+    const _chapters =  queryState?.data?.docSet?.document?.cIndexes?.map((a) => a.chapter) || []
     if(!_chapters?.includes(navState.chapter)){
         setNavState((prevState) => ({ ...prevState, chapter: '1', chapters:_chapters }));
     }else(
         setNavState((prevState) => ({ ...prevState, chapters:_chapters }))
     )
-    },[queryState])
+    },[queryState, pkState.newStateId])
 
     const onLoaded = useCallback(() => {
         pkState.newStateId();
