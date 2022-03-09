@@ -218,7 +218,7 @@ const titleHTMLTemplate = `<div class="titlePage">
 </div>
 `;
 
-const pagedJSStyle = `        @page {
+const pagedJSStyle = `@page {
             size: 210mm 297mm;
             margin-top: 20mm;
             margin-left: 20mm;
