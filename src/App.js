@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
     IonApp,
@@ -26,8 +26,9 @@ import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
 import BrowseVerse from './pages/BrowseVerse/BrowseVerse';
 import Search from './pages/Search/Search';
 import Print from './pages/Print/Print';
-import doFetch from './lib/doFetch';
+import {nt_2book as frozen, } from 'proskomma-frozen-archives';
 import { useCatalog, useQuery } from 'proskomma-react-hooks';
+import {thaw} from "proskomma-freeze";
 
 import './App.css';
 
@@ -54,8 +55,6 @@ import { useState } from 'react';
 setupIonicReact();
 
 const App = () => {
-    const verbose = true;
-    const pkState = useProskomma({ verbose });
     const initialState = {
         docSetId: 'xyz-eng_emtv',
         bookCode: 'GAL',
@@ -64,6 +63,9 @@ const App = () => {
         verse: '1',
     };
     const [navState, setNavState] = useState(initialState);
+
+    const verbose = true;
+    const pkState = useProskomma({ verbose });
 
     const getBBCQuery = (navState) => {
         const query = '{' +
@@ -79,6 +81,14 @@ const App = () => {
             .replace("%bookCode%", navState.bookCode)
       };
 
+    useEffect(() => {
+        thaw(pkState.proskomma, frozen)
+            .then(() => {
+                console.log("thawed");
+                pkState.newStateId();
+            });
+    }, []);
+
     const queryState = useQuery({
         ...pkState,
         query: getBBCQuery(navState),
@@ -91,7 +101,6 @@ const App = () => {
         verbose: true,
     });
 
-
     useEffect(() => {
     const _chapters =  queryState?.data?.docSet?.document?.cIndexes?.map((a) => a.chapter) || []
     if(!_chapters?.includes(navState.chapter)){
@@ -100,14 +109,6 @@ const App = () => {
         setNavState((prevState) => ({ ...prevState, chapters:_chapters }))
     )
     },[queryState, pkState.newStateId])
-
-    const onLoaded = useCallback(() => {
-        pkState.newStateId();
-    }, []);
-
-    useEffect(() => {
-        doFetch(pkState, onLoaded);
-    }, []);
 
     return (
         <IonApp>
