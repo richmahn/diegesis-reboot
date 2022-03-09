@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import axios from 'axios';
-import {Buffer} from 'buffer';
 import {
     IonCol,
     IonContent,
@@ -13,27 +11,20 @@ import {
     IonSelect,
     IonSelectOption,
     IonInput,
-    IonIcon,
     IonButton,
-    IonTitle,
-    IonText,
 } from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import {ScriptureParaModel, ScriptureParaModelQuery} from "proskomma-render";
 import MainDocSet from './MainDocSet';
 import "./Print.css";
-import {Previewer} from "pagedjs";
-import {printOutline} from "ionicons/icons";
+import {pagedJSStyle} from "./htmlResources";
 
 export default function Print({pkState, navState, setNavState, catalog}) {
-    const [bibleHtml, setBibleHtml] = useState("");
     const [queryJson, setQueryJson] = useState(null);
     const [bibleName, setBibleName] = useState(navState.docSetId);
     const [userTypedBibleName, setUserTypedBibleName] = useState(false);
     const [bibleBooks, setBibleBooks] = useState([]);
     const [bibleBookOptions, setBibleBookOptions] = useState([]);
-    const [flowPages, setFlowPages] = useState(0);
-    const previewer = new Previewer();
 
     useEffect(() => {
         if (!userTypedBibleName) {
@@ -97,55 +88,23 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                 const model = new ScriptureParaModel(queryJson, config);
                 model.addDocSetModel('default', new MainDocSet(queryJson, model.context, config));
                 model.render();
-                setBibleHtml(config.output);
-                document.querySelector("#preview").innerHTML = "";
-                previewer.preview(
-                    config.output,
-                    ["Print.css"],
-                    document.querySelector("#preview")
-                ).then(flow => {
-                    console.log("preview rendered, total pages", flow.total);
-                    setFlowPages(flow.total);
-                });
+                const newPage = window.open();
+                const htmlBody = config.output.replace(/^[\s\S]*<body>/,"").replace(/<\/body>[\s\S]*/, "");
+                newPage.document.body.innerHTML = htmlBody;
+                newPage.document.head.innerHTML = "<title>PDF Preview</title>";
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/pagedjs/dist/paged.polyfill.js';
+                newPage.document.head.appendChild(script);
+                const style = document.createElement('style');
+                style.innerHTML=pagedJSStyle;
+                newPage.document.head.appendChild(style);
             }
             if (queryJson && bibleBooks.length > 0 && bibleName) {
-                setFlowPages(0);
                 doRender().then();
             }
         },
         [queryJson, bibleName, bibleBooks]
     );
-
-    useEffect(
-        () => {
-            if (bibleHtml) {
-                const doPost = async () => {
-                    const axiosInstance = axios.create({});
-                    axiosInstance.defaults.headers = {
-                        'Content-Type': 'multipart/form-data',
-                        'Cache-Control': 'no-cache',
-                        'Pragma': 'no-cache',
-                        'Expires': '0',
-                    };
-                    const formData = new FormData();
-                    const buf = Buffer.from(bibleHtml);
-                    formData.append('bibleHtml', buf)
-                    await axiosInstance.post(
-                        `http://localhost:8088/bibleHtml`,
-                        formData,
-                        {
-                            responseType: 'arraybuffer',
-                            "validateStatus": false,
-                        }
-                    ).then(res => {
-                        console.log(String.fromCharCode.apply(null, new Uint8Array(res.data)));
-                    })
-                }
-                doPost().then();
-            }
-        },
-        [bibleHtml]
-    )
 
     return (
         <IonPage>
@@ -220,29 +179,6 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                             >
                                 No Books
                             </IonButton>
-                        </IonCol>
-                    </IonRow>
-                    {bibleBooks.length > 0 && bibleHtml && <IonRow>
-                        <IonCol>
-                            <IonTitle>{flowPages === 0 ? "Rendering..." : `${flowPages} pages rendered`}</IonTitle>
-                        </IonCol>
-                        <IonCol>
-                            <IonText class="ion-float-right">
-                                {flowPages > 0 && <a
-                                    id="print-icon"
-                                    href="http://localhost:8088/html/bible.html"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    <IonIcon size="large" title="Open HTML" icon={printOutline} />
-                                </a>}
-                            </IonText>
-                        </IonCol>
-                    </IonRow>}
-                    <IonRow>
-                        <IonCol>
-                            <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
-                            <div id="preview"></div>
                         </IonCol>
                     </IonRow>
                 </IonGrid>
