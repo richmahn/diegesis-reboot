@@ -8,6 +8,23 @@ import "./Search.css";
 
 export default function Search({pkState, navState, setNavState, catalog}) {
 
+    const searchResultRows = (p) => {
+
+        if (!searchText) {
+            return <IonRow>
+                <IonCol size={12}>Please enter some search text</IonCol>
+            </IonRow>;
+        } else if (p.length < 1) {
+                return <IonRow>
+                     <IonCol size={12}>No text found</IonCol>
+                 </IonRow>;
+        } else {
+           return p.map((p, n) => <IonRow key={n}>
+            <IonCol size={1}>{p.reference}</IonCol>
+            <IonCol size={11}>{p.text}</IonCol>
+        </IonRow>)
+        }
+    }
     const verbose = true;
 
     const [searchText, setSearchText] = useState('');
@@ -52,11 +69,8 @@ export default function Search({pkState, navState, setNavState, catalog}) {
                             />
                         </IonCol>
                     </IonRow>
-                    {passages.map((p, n) => <IonRow key={n}>
-                            <IonCol size={1}>{p.reference}</IonCol>
-                            <IonCol size={11}>{p.text}</IonCol>
-                        </IonRow>)}
-                </IonGrid>
+                    {searchResultRows(passages)}
+                    </IonGrid>
             </IonContent>
         </IonPage>
     );
