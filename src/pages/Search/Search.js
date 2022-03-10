@@ -1,32 +1,33 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
-import {IonPage} from "@ionic/react";
+import {IonPage, IonContent, IonGrid, IonRow, IonCol, IonInput} from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
-import StubPageContent from "../../components/StubPageContent";
+import { useSearchForPassages } from "proskomma-react-hooks";
 
 import "./Search.css";
 
 export default function Search({pkState, navState, setNavState, catalog}) {
-    const getSearchQuery = (navState, searchPhrase) => {
-        const query =
-            "{" +
-            '  docSet(id:"%docSetId%") {' +
-            "    id" +
-            '    document(bookCode:"%bookCode%") {' +
-            "      mainSequence {" +
-            '    blocks(withChars:["%searchPhrase%"]) {' +
-            '      scopeLabels(startsWith:["chapter", "verse/"])' +
-            "      text" +
-            "    }" +
-            "  }" +
-            "    }" +
-            "  }" +
-            "}";
-        return query
-            .replace("%docSetId%", navState.docSetId)
-            .replace("%bookCode%", navState.bookCode)
-            .replace("%searchPhrase%", searchPhrase);
-    };
+
+    const verbose = true;
+
+    const [searchText, setSearchText] = useState('');
+
+    const {
+        // stateId: searchStateId,
+        // bookCodes,
+        passages,
+        // passagesBookCodes,
+        // dataArray,
+        // errors: searchErrors,
+    } = useSearchForPassages({
+        proskomma: pkState.proskomma,
+        stateId: pkState.stateId,
+        text: searchText,
+        docSetId: navState.docSetId,
+        blocks: false,
+        tokens: false,
+        verbose,
+    });
 
     return (
         <IonPage>
@@ -36,11 +37,18 @@ export default function Search({pkState, navState, setNavState, catalog}) {
                 setNavState={setNavState}
                 catalog={catalog}
             />
-            <StubPageContent
-                pkState={pkState}
-                query={getSearchQuery(navState, "free")}
-                description="Search for verses containing certain words (currently 'free' in Galatians)."
-            />
+            <IonContent>
+                <IonGrid>
+                    <IonRow>
+                        <IonCol>
+                            <IonInput value={searchText} onIonChange={(e)=>setSearchText(e.target.value)} />
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>{JSON.stringify(passages)}</IonCol>
+                    </IonRow>
+                </IonGrid>
+            </IonContent>
         </IonPage>
     );
 }

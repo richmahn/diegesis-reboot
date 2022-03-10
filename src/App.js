@@ -26,7 +26,7 @@ import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
 import BrowseVerse from './pages/BrowseVerse/BrowseVerse';
 import Search from './pages/Search/Search';
 import Print from './pages/Print/Print';
-import {nt_2book as frozen, } from 'proskomma-frozen-archives';
+import {nt_2book as frozen} from 'proskomma-frozen-archives';
 import { useCatalog, useQuery } from 'proskomma-react-hooks';
 import {thaw} from "proskomma-freeze";
 
@@ -205,7 +205,6 @@ const App = () => {
                             tab="search"
                             href="/search"
                             data-test-id="tab-bar-button-tab5"
-                            disabled={true}
                         >
                             <IonIcon icon={search} />
                             <IonLabel>Search</IonLabel>
