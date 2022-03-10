@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
-import {IonPage, IonContent, IonGrid, IonRow, IonCol, IonInput} from "@ionic/react";
+import {IonPage, IonContent, IonGrid, IonRow, IonCol, IonInput, IonLabel } from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import { useSearchForPassages } from "proskomma-react-hooks";
 
@@ -40,17 +40,22 @@ export default function Search({pkState, navState, setNavState, catalog}) {
             <IonContent>
                 <IonGrid>
                     <IonRow>
-                        <IonCol>
+                        <IonCol size={1}>
+                            <IonLabel position="floating">Search: </IonLabel> 
+                        </IonCol>
+                        <IonCol size={11}>   
                             <IonInput
+                                text-wrap
                                 value={searchText}
                                 onIonChange={(e)=>setSearchText(e.target.value)}
                                 debounce={500}
                             />
                         </IonCol>
                     </IonRow>
-                    <IonRow>
-                        <IonCol><pre>{JSON.stringify(passages, null, 2)}</pre></IonCol>
-                    </IonRow>
+                    {passages.map((p, n) => <IonRow key={n}>
+                            <IonCol size={1}>{p.reference}</IonCol>
+                            <IonCol size={11}>{p.text}</IonCol>
+                        </IonRow>)}
                 </IonGrid>
             </IonContent>
         </IonPage>
