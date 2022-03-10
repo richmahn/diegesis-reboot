@@ -1,0 +1,9 @@
+.native-input.sc-ion-input-md {
+    border: .5px;
+    border-width: .1px;
+    border-radius: 1px;
+    border-color:aqua;
+    max-width: 10%;
+    outline: solid;
+    padding: 2px;
+}
