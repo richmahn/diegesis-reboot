@@ -45,7 +45,7 @@ export default function Search({pkState, navState, setNavState, catalog}) {
                         </IonCol>
                     </IonRow>
                     <IonRow>
-                        <IonCol>{JSON.stringify(passages)}</IonCol>
+                        <IonCol><pre>{JSON.stringify(passages, null, 2)}</pre></IonCol>
                     </IonRow>
                 </IonGrid>
             </IonContent>
