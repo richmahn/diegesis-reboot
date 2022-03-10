@@ -57,7 +57,7 @@ setupIonicReact();
 const App = () => {
     const initialState = {
         docSetId: 'xyz-eng_emtv',
-        bookCode: 'GAL',
+        bookCode: '3JN',
         chapter: '1',
         chapters:[],
         verse: '1',
