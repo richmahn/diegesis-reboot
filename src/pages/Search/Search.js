@@ -41,7 +41,11 @@ export default function Search({pkState, navState, setNavState, catalog}) {
                 <IonGrid>
                     <IonRow>
                         <IonCol>
-                            <IonInput value={searchText} onIonChange={(e)=>setSearchText(e.target.value)} />
+                            <IonInput
+                                value={searchText}
+                                onIonChange={(e)=>setSearchText(e.target.value)}
+                                debounce={500}
+                            />
                         </IonCol>
                     </IonRow>
                     <IonRow>
