@@ -75,6 +75,7 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
                                 value={reference}
                                 onIonChange={e => setReference(e.target.value)}
                                 debounce={500}
+                                style={{color: parseResult.parsed && parseResult.startVerse ? '#0C0' : '#C00'}}
                             />
                         </IonCol>
                     </IonRow>
