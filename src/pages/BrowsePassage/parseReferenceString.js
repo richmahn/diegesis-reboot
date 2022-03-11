@@ -1,4 +1,4 @@
-const parseReferenceString = reference => {
+export default function(reference) {
     // LUK 1 ;  LUK 1:1 ; LUK 1:1-3 ; LUK 1:3-2:4
     const digitRE = /^[1-9][0-9]*$/
     const response = {
@@ -51,6 +51,4 @@ const parseReferenceString = reference => {
 
     }
     return response;
-};
-
-module.exports = parseReferenceString;
+}

@@ -1,4 +1,4 @@
-const sharedActions = {
+export default ({
     // Character markup - open or close an element
     characterScope: [
         'scope',
@@ -66,6 +66,4 @@ const sharedActions = {
             return renderer.appendToTopStackRow(tokenString);
         }
     ],
-};
-
-module.exports = sharedActions;
+});

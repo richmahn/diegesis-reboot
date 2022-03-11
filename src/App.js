@@ -103,6 +103,8 @@ const App = () => {
         verbose: true,
     });
 
+    console.log(catalog);
+
     useEffect(() => {
     const _chapters =  queryState?.data?.docSet?.document?.cIndexes?.map((a) => a.chapter) || []
     if(!_chapters?.includes(navState.chapter)){
