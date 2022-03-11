@@ -21,7 +21,7 @@
     "pagedjs": "^0.2.0",
     "proskomma-freeze": "^0.6.2",
     "proskomma-frozen-archives": "0.0.3",
-    "proskomma-react-hooks": "^1.8.1",
+    "proskomma-react-hooks": "^1.10.0",
     "proskomma-render": "^0.6.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
