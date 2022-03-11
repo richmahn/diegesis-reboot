@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {usePassage} from "proskomma-react-hooks";
+import {useQuery} from "proskomma-react-hooks";
 import PropTypes from "prop-types";
 import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonInput} from '@ionic/react';
 import PageHeader from "../../components/PageHeader";
@@ -10,19 +10,38 @@ import "./BrowsePassage.css";
 export default function BrowsePassage({pkState, navState, setNavState, catalog}) {
 
     const [reference, setReference] = useState('');
-    const [parsedReference, setParsedReference] = useState('3JN 1:1');
+    const [parsedReference, setParsedReference] = useState('');
+    const [parseResult, setParseResult] = useState({});
 
     const verbose=true;
 
     useEffect(
         () => {
-            if (parseReferenceString(reference).parsed) {
-                setParsedReference(reference);
+            const pr = parseReferenceString(reference);
+            setParseResult(pr);
+            if (pr.parsed) {
+                setParsedReference(pr.original);
             }
         } ,
         [reference]
     );
 
+    const queryState = useQuery({
+        ...pkState,
+        query: `{
+  docSet(id:"${navState.docSetId}") {
+    document(bookCode:"${parsedReference.split(/\s+/)[0]}") {
+      cv(chapterVerses:"${parsedReference.split(/\s+/)[1]}") {
+        scopeLabels(startsWith:["chapter", "verses"])
+        text
+      }
+    }
+  }
+}`,
+        verbose,
+    });
+
+    /*
     const {
         // stateId: passageStateId,
         query,
@@ -36,6 +55,9 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
         reference: parsedReference,
         verbose,
     });
+*/
+
+    console.log(parseResult)
 
     return (
         <IonPage>
@@ -57,31 +79,8 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
                         </IonCol>
                     </IonRow>
                     <IonRow>
-                        <IonCol size={1} className="debugLabels">Last Parsed Ref</IonCol>
-                        <IonCol size={1} className="debugLabels">{parsedReference}</IonCol>
-                        <IonCol size={1} className="debugLabels">Current Ref</IonCol>
-                        <IonCol size={9}>
-                            <pre className="debugLabels">
-                                {
-                                    JSON.stringify(
-                                        parseReferenceString(reference),
-                                        null,
-                                        2)
-                                }
-                            </pre>
-                        </IonCol>
-                    </IonRow>
-                    <IonRow>
-                        <IonCol size={1} className="debugLabels">Query</IonCol>
-                        <IonCol size={11}><pre className="json">{query}</pre></IonCol>
-                    </IonRow>
-                    <IonRow>
                         <IonCol size={1} className="debugLabels">Data</IonCol>
-                        <IonCol size={11}><pre className="json">{JSON.stringify(data, null, 2)}</pre></IonCol>
-                    </IonRow>
-                    <IonRow>
-                        <IonCol size={1} className="debugLabels">Passages</IonCol>
-                        <IonCol size={11}><pre className="json">{JSON.stringify(passages, null, 2)}</pre></IonCol>
+                        <IonCol size={11}><pre className="json">{JSON.stringify(queryState.data, null, 2)}</pre></IonCol>
                     </IonRow>
                 </IonGrid>
             </IonContent>
