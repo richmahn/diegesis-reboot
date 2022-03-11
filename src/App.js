@@ -17,6 +17,7 @@ import {
     reader,
     book,
     diamond,
+    crop,
     search,
     print,
 } from 'ionicons/icons';
@@ -24,6 +25,7 @@ import Versions from './pages/Versions/Versions';
 import BrowseBook from './pages/BrowseBook/BrowseBook';
 import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
 import BrowseVerse from './pages/BrowseVerse/BrowseVerse';
+import BrowsePassage from './pages/BrowsePassage/BrowsePassage';
 import Search from './pages/Search/Search';
 import Print from './pages/Print/Print';
 import {nt_ebible_27book as frozen} from 'proskomma-frozen-archives';
@@ -148,6 +150,14 @@ const App = () => {
                                 setNavState={setNavState}
                             />
                         </Route>
+                        <Route path="/browsePassage">
+                            <BrowsePassage
+                                catalog={catalog}
+                                pkState={pkState}
+                                navState={navState}
+                                setNavState={setNavState}
+                            />
+                        </Route>
                         <Route path="/search">
                             <Search
                                 catalog={catalog}
@@ -202,9 +212,17 @@ const App = () => {
                             <IonLabel>Verse</IonLabel>
                         </IonTabButton>
                         <IonTabButton
+                            tab="browsePassage"
+                            href="/browsePassage"
+                            data-test-id="tab-bar-button-tab5"
+                        >
+                            <IonIcon icon={crop} />
+                            <IonLabel>Passage</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton
                             tab="search"
                             href="/search"
-                            data-test-id="tab-bar-button-tab5"
+                            data-test-id="tab-bar-button-tab6"
                         >
                             <IonIcon icon={search} />
                             <IonLabel>Search</IonLabel>
@@ -212,7 +230,7 @@ const App = () => {
                         <IonTabButton
                             tab="print"
                             href="/print"
-                            data-test-id="tab-bar-button-tab6"
+                            data-test-id="tab-bar-button-tab7"
                         >
                             <IonIcon icon={print} />
                             <IonLabel>Print</IonLabel>

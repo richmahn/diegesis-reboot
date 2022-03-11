@@ -1,0 +1,32 @@
+.label {
+    font-style: italic;
+    color: blue;
+}
+
+.identifier {
+    font-weight: bolder;
+    color: blue;
+}
+
+.scrRef {
+    margin-right: 0.25em;
+    font-weight: bolder;
+}
+
+p {
+    margin-top: 0.1em;
+}
+
+p.scripture {
+    margin-bottom: 0.1em;
+    margin-top: 0.1em;
+}
+
+.json {
+    font-size: x-small;
+}
+
+.debugLabels {
+    font-size: x-small;
+    font-weight: bold;
+}
