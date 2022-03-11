@@ -58,9 +58,9 @@ export default function Search({pkState, navState, setNavState, catalog}) {
                 <IonGrid>
                     <IonRow>
                         <IonCol size={1}>
-                            <IonLabel position="floating">Search: </IonLabel> 
+                            <IonLabel position="floating">Search: </IonLabel>
                         </IonCol>
-                        <IonCol size={11}>   
+                        <IonCol size={11}>
                             <IonInput
                                 text-wrap
                                 value={searchText}
