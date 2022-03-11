@@ -26,7 +26,7 @@ import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
 import BrowseVerse from './pages/BrowseVerse/BrowseVerse';
 import Search from './pages/Search/Search';
 import Print from './pages/Print/Print';
-import {nt_2book as frozen} from 'proskomma-frozen-archives';
+import {nt_ebible_27book as frozen} from 'proskomma-frozen-archives';
 import { useCatalog, useQuery } from 'proskomma-react-hooks';
 import {thaw} from "proskomma-freeze";
 
@@ -56,7 +56,7 @@ setupIonicReact();
 
 const App = () => {
     const initialState = {
-        docSetId: 'xyz-eng_emtv',
+        docSetId: 'xyz-fra_lsg',
         bookCode: '3JN',
         chapter: '1',
         chapters:[],
