@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
-import {IonPage, IonContent, IonGrid, IonRow, IonCol, IonInput, IonLabel } from "@ionic/react";
+import {IonPage, IonContent, IonGrid, IonRow, IonCol, IonInput, IonLabel, IonButton } from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import { useSearchForPassages } from "proskomma-react-hooks";
 
@@ -10,14 +10,10 @@ export default function Search({pkState, navState, setNavState, catalog}) {
 
     const searchResultRows = (p) => {
 
-        if (!searchText) {
+        if (!searchText && p.length < 1) {
             return <IonRow>
                 <IonCol size={12}>Please enter some search text</IonCol>
             </IonRow>;
-        } else if (p.length < 1) {
-                return <IonRow>
-                     <IonCol size={12}>No text found</IonCol>
-                 </IonRow>;
         } else {
            return p.map((p, n) => <IonRow key={n}>
             <IonCol size={1}>{p.reference}</IonCol>
@@ -28,6 +24,17 @@ export default function Search({pkState, navState, setNavState, catalog}) {
     const verbose = true;
 
     const [searchText, setSearchText] = useState('');
+    const [displayMode, setDisplayMode] = useState('verse');
+   // const block = 'block';
+  //  const verse = 'verse';
+  //  const displayOption = { block, verse, };
+    const displayFunction = (p) => {
+        if (p === 'block') {
+           setDisplayMode('verse');
+        } else {
+           setDisplayMode('block');
+       }
+    }; 
 
     const {
         // stateId: searchStateId,
@@ -41,7 +48,7 @@ export default function Search({pkState, navState, setNavState, catalog}) {
         stateId: pkState.stateId,
         text: searchText,
         docSetId: navState.docSetId,
-        blocks: false,
+        blocks: displayMode === 'block',
         tokens: false,
         verbose,
     });
@@ -60,17 +67,24 @@ export default function Search({pkState, navState, setNavState, catalog}) {
                         <IonCol size={1}>
                             <IonLabel position="floating">Search: </IonLabel>
                         </IonCol>
-                        <IonCol size={11}>
+                        <IonCol size={2}>
                             <IonInput
+                                className='search'
                                 text-wrap
                                 value={searchText}
                                 onIonChange={(e)=>setSearchText(e.target.value)}
                                 debounce={500}
                             />
                         </IonCol>
+                        <IonCol size={2} position="right">
+                            <IonLabel position='fixed' >Click for blocks or verses</IonLabel>
+                        </IonCol>
+                        <IonCol>
+                            <IonButton value={displayMode} onClick={(e) => displayFunction(e.target.value)} />
+                        </IonCol>
                     </IonRow>
                     {searchResultRows(passages)}
-                    </IonGrid>
+                </IonGrid>
             </IonContent>
         </IonPage>
     );

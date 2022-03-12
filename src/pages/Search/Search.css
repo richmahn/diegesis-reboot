@@ -3,7 +3,20 @@
     border-width: .1px;
     border-radius: 1px;
     border-color:aqua;
-    max-width: 10%;
+    max-width: 70%;
     outline: solid;
     padding: 2px;
+}
+
+.label-fixed.sc-ion-label-md-h {
+    max-width: 70%;
+    padding: 2px;
+}
+
+.button-native {
+    border: .5px;
+    border-width: .1px;
+    border-radius: 1px;
+    max-width: 70%;
+    padding: 0px;
 }
