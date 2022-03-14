@@ -15,11 +15,15 @@ export default function Search({pkState, navState, setNavState, catalog}) {
 
     const searchResultRows = (p) => {
 
-        if (!searchText && p.length < 1) {
+        if (!searchText) {
             return <IonRow>
                 <IonCol size={12}>Please enter some search text</IonCol>
             </IonRow>;
-        } else {
+        } else if (p.length < 1) {
+            return <IonRow>
+                 <IonCol size={12}>No text found</IonCol>
+             </IonRow>;
+    } else {
             return p.map((p, n) => <IonRow key={n}>
                 <IonCol size={1}>{p.reference}</IonCol>
                 <IonCol size={11}>{p.text}</IonCol>
