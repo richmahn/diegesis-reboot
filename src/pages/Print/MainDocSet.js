@@ -4,7 +4,7 @@ const MainDocument = require('./CanonicalDocument');
 const PeripheralDocument = require('./PeripheralDocument');
 const {startHTMLTemplate, endHTMLTemplate, tocHTMLTemplate, titleHTMLTemplate} = require('./htmlResources');
 
-class MainDocSet extends ScriptureDocSet {
+export default class MainDocSet extends ScriptureDocSet {
 
     constructor(result, context, config) {
         super(result, context, config);
@@ -93,5 +93,3 @@ const addActions = (dsInstance) => {
         }
     );
 }
-
-module.exports = MainDocSet;

@@ -1,7 +1,7 @@
 const { ScriptureParaDocument } = require('proskomma-render');
 const sharedActions = require('./shared_actions');
 
-class PeripheralDocument extends ScriptureParaDocument {
+export default class PeripheralDocument extends ScriptureParaDocument {
 
     constructor(result, context, config) {
         super(result, context, config);
@@ -160,5 +160,3 @@ const addActions = (dInstance) => {
         }
     );
 };
-
-module.exports = PeripheralDocument;
