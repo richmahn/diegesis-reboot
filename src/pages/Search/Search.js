@@ -28,7 +28,7 @@ export default function Search({pkState, navState, setNavState, catalog}) {
    // const block = 'block';
   //  const verse = 'verse';
   //  const displayOption = { block, verse, };
-    const displayFunction = (p) => {
+    const toggleSearchDisplayMode = (p) => {
         if (p === 'block') {
            setDisplayMode('verse');
         } else {
@@ -69,6 +69,7 @@ export default function Search({pkState, navState, setNavState, catalog}) {
                         </IonCol>
                         <IonCol size={2}>
                             <IonInput
+                                size='small'
                                 className='search'
                                 text-wrap
                                 value={searchText}
@@ -76,11 +77,8 @@ export default function Search({pkState, navState, setNavState, catalog}) {
                                 debounce={500}
                             />
                         </IonCol>
-                        <IonCol size={2} position="right">
-                            <IonLabel position='fixed' >Click for blocks or verses</IonLabel>
-                        </IonCol>
-                        <IonCol>
-                            <IonButton value={displayMode} onClick={(e) => displayFunction(e.target.value)} />
+                        <IonCol size={8}>
+                            <IonButton size='small' value={displayMode} onClick={(e) => toggleSearchDisplayMode(e.target.value)}>Searching {displayMode}</IonButton>
                         </IonCol>
                     </IonRow>
                     {searchResultRows(passages)}
