@@ -12,15 +12,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { useProskomma } from 'proskomma-react-hooks';
-import {
-    albums,
-    reader,
-    book,
-    diamond,
-    crop,
-    search,
-    print,
-} from 'ionicons/icons';
+import { albums, reader, book, diamond, crop, search, print } from 'ionicons/icons';
 import Versions from './pages/Versions/Versions';
 import BrowseBook from './pages/BrowseBook/BrowseBook';
 import BrowseChapter from './pages/BrowseChapter/BrowseChapter';
@@ -28,9 +20,9 @@ import BrowseVerse from './pages/BrowseVerse/BrowseVerse';
 import BrowsePassage from './pages/BrowsePassage/BrowsePassage';
 import Search from './pages/Search/Search';
 import Print from './pages/Print/Print';
-import {nt_ebible_27book as frozen} from 'proskomma-frozen-archives';
-import { useCatalog, useQuery } from 'proskomma-react-hooks';
-import {thaw} from "proskomma-freeze";
+import { nt_ebible_27book as frozen } from 'proskomma-frozen-archives';
+import { useCatalog } from 'proskomma-react-hooks';
+import { thaw } from 'proskomma-freeze';
 
 import './App.css';
 
@@ -61,7 +53,6 @@ const App = () => {
         docSetId: 'xyz-fra_lsg',
         bookCode: '3JN',
         chapter: '1',
-        chapters:[],
         verse: '1',
     };
     const [navState, setNavState] = useState(initialState);
@@ -69,33 +60,12 @@ const App = () => {
     const verbose = true;
     const pkState = useProskomma({ verbose });
 
-    const getBBCQuery = (navState) => {
-        const query = '{' +
-            '  docSet(id:"%docSetId%") {' +
-            '    id' +
-            '    document(bookCode:"%bookCode%") {' +
-            '      cIndexes {chapter}' +
-            '    }' +
-            '  }' +
-            '}';
-        return query
-            .replace("%docSetId%", navState.docSetId)
-            .replace("%bookCode%", navState.bookCode)
-      };
-
     useEffect(() => {
-        thaw(pkState.proskomma, frozen)
-            .then(() => {
-                console.log("thawed");
-                pkState.newStateId();
-            });
+        thaw(pkState.proskomma, frozen).then(() => {
+            console.log('thawed');
+            pkState.newStateId();
+        });
     }, []);
-
-    const queryState = useQuery({
-        ...pkState,
-        query: getBBCQuery(navState),
-        verbose: true,
-    });
 
     const { catalog, error: catalogError } = useCatalog({
         proskomma: pkState.proskomma,
@@ -103,15 +73,6 @@ const App = () => {
         verbose: true,
         cv: true,
     });
-
-    useEffect(() => {
-    const _chapters =  queryState?.data?.docSet?.document?.cIndexes?.map((a) => a.chapter) || []
-    if(!_chapters?.includes(navState.chapter)){
-        setNavState((prevState) => ({ ...prevState, chapter: '1', chapters:_chapters }));
-    }else(
-        setNavState((prevState) => ({ ...prevState, chapters:_chapters }))
-    )
-    },[queryState, pkState.newStateId])
 
     return (
         <IonApp>
@@ -122,7 +83,6 @@ const App = () => {
                             <Versions
                                 catalogError={catalogError}
                                 catalog={catalog}
-                                pkState={pkState}
                                 navState={navState}
                                 setNavState={setNavState}
                             />
@@ -175,7 +135,7 @@ const App = () => {
                                 pkState={pkState}
                             />
                         </Route>
-                        <Route exact path="/" >
+                        <Route exact path="/">
                             <Redirect to="/versions" />
                         </Route>
                     </IonRouterOutlet>
@@ -228,11 +188,7 @@ const App = () => {
                             <IonIcon icon={search} />
                             <IonLabel>Search</IonLabel>
                         </IonTabButton>
-                        <IonTabButton
-                            tab="print"
-                            href="/print"
-                            data-test-id="tab-bar-button-tab7"
-                        >
+                        <IonTabButton tab="print" href="/print" data-test-id="tab-bar-button-tab7">
                             <IonIcon icon={print} />
                             <IonLabel>Print</IonLabel>
                         </IonTabButton>

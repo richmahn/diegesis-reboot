@@ -9,7 +9,7 @@ const BookDropDown = ({ navState, setNavState, catalog }) => {
             const findBible = (doc) => doc.id === navState.docSetId;
             const bible = catalog?.docSets.find(findBible);
             setDocuments(bible?.documents ?? []);
-            //Get book, as a fallback take the first book of the selected Bible
+            //See if current book is in current bible, fallback to first book of current Bible
             const book =
                 bible?.documents.find((doc) => doc.bookCode === navState.bookCode) ??
                 bible?.documents[0];

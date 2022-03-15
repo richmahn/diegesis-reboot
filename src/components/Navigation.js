@@ -7,39 +7,28 @@ import ChapterDropDown from "./ChapterDropDown";
 import VerseDropDown from "./VerseDropDown";
 
 const Navigation = ({ navState, setNavState, catalog }) => {
-  return (
-    <>
-      <IonCol size={3}>
-        <BibleDropDown
-          navState={navState}
-          setNavState={setNavState}
-          catalog={catalog}
-        />
-      </IonCol>
-      <IonCol size={3}>
-        <BookDropDown
-          navState={navState}
-          setNavState={setNavState}
-          catalog={catalog}
-        />
-      </IonCol>
-      <IonCol size={3}>
-        <ChapterDropDown 
-        navState={navState}
-        setNavState={setNavState}
-        />
-      </IonCol>
-      <IonCol size={3}>
-        <VerseDropDown />
-      </IonCol>
-    </>
-  );
+    return (
+        <>
+            <IonCol size={3}>
+                <BibleDropDown navState={navState} setNavState={setNavState} catalog={catalog} />
+            </IonCol>
+            <IonCol size={3}>
+                <BookDropDown navState={navState} setNavState={setNavState} catalog={catalog} />
+            </IonCol>
+            <IonCol size={3}>
+                <ChapterDropDown navState={navState} setNavState={setNavState} catalog={catalog} />
+            </IonCol>
+            <IonCol size={3}>
+                <VerseDropDown navState={navState} setNavState={setNavState} catalog={catalog} />
+            </IonCol>
+        </>
+    );
 };
 
 export default Navigation;
 
 Navigation.propTypes = {
-  navState: PropTypes.object.isRequired,
-  setNavState: PropTypes.func.isRequired,
-  catalog: PropTypes.object.isRequired,
+    navState: PropTypes.object.isRequired,
+    setNavState: PropTypes.func.isRequired,
+    catalog: PropTypes.object.isRequired,
 };
