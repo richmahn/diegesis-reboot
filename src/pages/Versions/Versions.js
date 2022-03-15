@@ -15,12 +15,7 @@ export default function Versions({navState, setNavState, catalog, catalogErrors}
 
                     <IonList slot="content">
                         {docSet.documents.map((d, n) => <IonItem key={n}><div>
-                            <IonLabel className="bookCodeLabel">Book Code: {d.bookCode}</IonLabel>
-                            {d.m && <IonLabel className="secondaryLabel">Main Title: {d.mt}</IonLabel>}
-                            {d.h && <IonLabel className="secondaryLabel">Header: {d.h}</IonLabel>}
-                            {d.toc && <IonLabel className="secondaryLabel">TOC: {d.toc}</IonLabel>}
-                            {d.toc2 && <IonLabel className="secondaryLabel">TOC 2: {d.toc2}</IonLabel>}
-                            {d.toc3 && <IonLabel className="secondaryLabel">TOC 3: {d.toc3}</IonLabel>}
+                            <IonLabel className="bookCodeLabel">{d.bookCode} - {d.toc || d.h || d.toc2 || d.toc3}</IonLabel>
                         </div></IonItem>)}
                     </IonList>
                 </IonAccordion>
