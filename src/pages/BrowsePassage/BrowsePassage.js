@@ -15,6 +15,15 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
 
     const verbose=true;
 
+    const sLO = (sL) => {
+        const ret = {};
+        sL.forEach(l => {
+            const [scopeType, scopeNumber] = l.split("/");
+            ret[scopeType] = scopeNumber;
+        })
+        return ret;
+    };
+
     useEffect(
         () => {
             const pr = parseReferenceString(reference);
@@ -31,6 +40,7 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
         query: `{
   docSet(id:"${navState.docSetId}") {
     document(bookCode:"${parsedReference.split(/\s+/)[0]}") {
+      bookCode: header(id: "bookCode")
       cv(chapterVerses:"${parsedReference.split(/\s+/)[1]}") {
         scopeLabels(startsWith:["chapter", "verses"])
         text
@@ -56,9 +66,44 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
         verbose,
     });
 */
+const renderText = (d) => {
+    if (reference === '') {
+        return <IonRow>
+                <IonCol>
+                    Please enter a book reference!
+                </IonCol>
+            </IonRow>;
+    } else if (!parseResult.parsed || !parseResult.startVerse) {
+        return <IonRow>
+                <IonCol>
+                    Wrong format!
+                </IonCol>
+            </IonRow>;
+    } else if (d.docSet?.document === null) {
+        return <IonRow>
+                <IonCol>
+                    Book not found!
+                </IonCol>
+            </IonRow>;
+    }  else if (!d.docSet?.document.cv[0]) {
+        return <IonRow>
+                <IonCol>
+                    Verse not found!
+                </IonCol>
+            </IonRow>;
+    }   else { return queryState.data.docSet?.document?.cv.map((v, n) => <IonRow key={n}>
+                        <IonCol>
+                            {`${queryState.data.docSet?.document?.bookCode} ${sLO(v.scopeLabels)["chapter"]}:${sLO(v.scopeLabels)["verses"]}`}
+                        </IonCol>
+                        <IonCol>
+                            {v.text}
+                        </IonCol>
+                    </IonRow>)
+    }
+};
 
-    console.log(parseResult)
 
+    console.log(queryState.data)
     return (
         <IonPage>
             <PageHeader
@@ -79,10 +124,7 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
                             />
                         </IonCol>
                     </IonRow>
-                    <IonRow>
-                        <IonCol size={1} className="debugLabels">Data</IonCol>
-                        <IonCol size={11}><pre className="json">{JSON.stringify(queryState.data, null, 2)}</pre></IonCol>
-                    </IonRow>
+                    {renderText(queryState.data)}
                 </IonGrid>
             </IonContent>
         </IonPage>
