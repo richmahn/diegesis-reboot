@@ -101,6 +101,7 @@ const App = () => {
         proskomma: pkState.proskomma,
         stateId: pkState.stateId,
         verbose: true,
+        cv: true,
     });
 
     console.log(catalog);
