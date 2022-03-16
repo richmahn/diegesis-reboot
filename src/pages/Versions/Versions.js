@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {IonAccordion, IonAccordionGroup, IonCol, IonContent, IonGrid, IonPage, IonRow, IonItem, IonLabel, IonList, IonTitle} from "@ionic/react";
+import {IonAccordion, IonAccordionGroup, IonCol, IonContent, IonGrid, IonPage, IonRow, IonItem, IonLabel, IonList, IonTitle, IonText, IonButton} from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import PkErrors from "../../components/PkErrors";
 import "./Versions.css";
@@ -14,13 +14,14 @@ export default function Versions({navState, setNavState, catalog, catalogErrors}
                     </IonItem>
 
                     <IonList slot="content">
-                        {docSet.documents.map((d, n) => <IonItem key={n}><div>
+                        {docSet.documents.map((d, n2) => <IonItem key={n2}><div>
                             <IonLabel className="bookCodeLabel">{d.bookCode} - {d.toc || d.h || d.toc2 || d.toc3}</IonLabel>
+                            <IonText>{catalog.docSets[n].documents[n2].cvNumbers.map(c1 => c1.chapter).map((c3, n3) => <IonButton key={n3} size="small" color="secondary" fill="outline">{c3}</IonButton>)}</IonText>
                         </div></IonItem>)}
                     </IonList>
                 </IonAccordion>
     }
-
+    
     return (
         <IonPage>
             <PageHeader
