@@ -7,7 +7,7 @@ import "./Versions.css";
 
 export default function Versions({navState, setNavState, catalog, catalogErrors}) {
 
-    const makeAccordian = function (docSet, n) {
+    const makeAccordion = function (docSet, n) {
         return  <IonAccordion key ={n} value={docSet.id}>
                     <IonItem slot="header">
                         <IonLabel className="accordianLabel">{docSet.id}</IonLabel>
@@ -21,7 +21,7 @@ export default function Versions({navState, setNavState, catalog, catalogErrors}
                     </IonList>
                 </IonAccordion>
     }
-    
+
     return (
         <IonPage>
             <PageHeader
@@ -40,7 +40,7 @@ export default function Versions({navState, setNavState, catalog, catalogErrors}
                     <IonRow>
                         <IonCol>
                             <IonAccordionGroup expand="inset" value={navState.docSetId}>
-                                {catalog.docSets && catalog.docSets.map((ds, n) => makeAccordian(ds, n))}
+                                {catalog.docSets && catalog.docSets.map((ds, n) => makeAccordion(ds, n))}
                             </IonAccordionGroup>
                         </IonCol>
                     </IonRow>
