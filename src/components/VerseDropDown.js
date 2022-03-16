@@ -15,7 +15,7 @@ const VerseDropDown = ({ navState, setNavState, catalog }) => {
                     setVerses(_verses);
                     //if invalid verse ie verse not in verse list set to 1
                     if (!_verses?.includes(navState.verse)) {
-                        setNavState((prevState) => ({ ...prevState, verse: "1" }));
+                        setNavState((prevState) => ({ ...prevState, verse: 1 }));
                     }
                 }
             }

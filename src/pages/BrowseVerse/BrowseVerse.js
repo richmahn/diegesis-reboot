@@ -15,8 +15,8 @@ export default function BrowseVerse({pkState, navState, setNavState, catalog}) {
             '    Version:selector(id:"abbr")' +
             '    document(bookCode:"%bookCode%") {' +
             '      mainSequence {' +
-            '        blocks(withScriptureCV:"%chapter%:9") {' +
-            '            items(withScriptureCV:"%chapter%:9"){type subType payload}' +
+            '        blocks(withScriptureCV:"%chapter%:%verse%") {' +
+            '            items(withScriptureCV:"%chapter%:%verse%"){type subType payload}' +
             '       }' +
             '     }' +
             '   }' +
@@ -26,7 +26,8 @@ export default function BrowseVerse({pkState, navState, setNavState, catalog}) {
         return query
             .replace("%docSetId%", navState.docSetId)
             .replace("%bookCode%", navState.bookCode)
-            .replaceAll("%chapter%", navState.chapter);
+            .replaceAll("%chapter%", navState.chapter)
+            .replaceAll("%verse%", navState.verse);
     };
 
     const verbose = true;
@@ -67,7 +68,7 @@ export default function BrowseVerse({pkState, navState, setNavState, catalog}) {
                 {renderDocSetInfo(ds)}
             </IonCol>
             <IonCol key="verse">
-                {ds.document.mainSequence.blocks && ds.document.mainSequence.blocks.map((b, n) => renderVerse(b, n))}
+                {ds.document?.mainSequence?.blocks && ds.document.mainSequence.blocks.map((b, n) => renderVerse(b, n))}
             </IonCol>
         </IonRow>
     };

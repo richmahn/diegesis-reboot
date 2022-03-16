@@ -52,8 +52,8 @@ const App = () => {
     const initialState = {
         docSetId: 'xyz-fra_lsg',
         bookCode: '3JN',
-        chapter: '1',
-        verse: '1',
+        chapter: 1,
+        verse: 1,
     };
     const [navState, setNavState] = useState(initialState);
 

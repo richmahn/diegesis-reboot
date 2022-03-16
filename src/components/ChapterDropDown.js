@@ -13,7 +13,7 @@ const ChapterDropDown = ({ navState, setNavState, catalog }) => {
                 setChapters(_chapters);
                 //if invalid chapter ie chapter not in chapter list set to 1
                 if (!_chapters?.includes(navState.chapter)) {
-                    setNavState((prevState) => ({ ...prevState, chapter: "1" }));
+                    setNavState((prevState) => ({ ...prevState, chapter: 1 }));
                 }
             }
         }
