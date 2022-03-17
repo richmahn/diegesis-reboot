@@ -24,28 +24,28 @@ export default function Versions({navState, setNavState, catalog, catalogErrors}
                 <IonItem slot="header">
                     <IonLabel className="accordianLabel">{docSet.id}</IonLabel>
                 </IonItem>
-
+                
                 <IonList slot="content">
-                    {docSet.documents.map((d, n2) => (
-                        <IonItem key={n2}>
-                            <div>
-                                <IonLabel className="bookCodeLabel">
-                                    {d.bookCode} - {d.toc || d.h || d.toc2 || d.toc3}
-                                </IonLabel>
-                                <IonText>
+                    <IonAccordionGroup expand="inset" value={navState.bookCode}>
+                        {docSet.documents.map((d, n2) => (
+                            <IonAccordion key={n2} value={d.bookCode}>
+                                <IonItem slot="header">
+                                    <IonLabel className="accordianLabel">{d.bookCode} - {d.toc || d.h || d.toc2 || d.toc3}</IonLabel>
+                                </IonItem>
+                                <IonText slot="content">
                                     {catalog.docSets[n].documents[n2].cvNumbers
                                         .map((c1) => c1.chapter)
                                         .map((c3, n3) => (
                                             <IonButton key={n3} size="small" color="secondary" fill="outline" doc={docSet.id} book={d.bookCode} chapter={c3} onClick={chapterClick} >{c3}</IonButton>
                                         ))}
                                 </IonText>
-                            </div>
-                        </IonItem>
-                    ))}
+                            </IonAccordion>
+                        ))}
+                    </IonAccordionGroup>
                 </IonList>
             </IonAccordion>
         );
-    }
+    };
 
     return (
         <IonPage>
