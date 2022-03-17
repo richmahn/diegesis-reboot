@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {useQuery} from "proskomma-react-hooks";
 import PropTypes from "prop-types";
-import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonInput, IonTitle, IonToggle} from '@ionic/react';
+import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonInput, IonTitle, IonToggle, IonLabel} from '@ionic/react';
 import PageHeader from "../../components/PageHeader";
 import parseReferenceString from "./parseReferenceString";
 
@@ -12,7 +12,7 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
     const [reference, setReference] = useState('3JN 1:1-3');
     const [parsedReference, setParsedReference] = useState('3JN 1:1-3');
     const [parseResult, setParseResult] = useState({});
-    const [allDocSets, setAllDocSets] = useState(true);
+    const [allDocSets, setAllDocSets] = useState(false);
 
     const verbose=true;
 
@@ -92,7 +92,7 @@ const renderText = () => {
         (ds, n) => {
             return <div key={n}>
                 <IonRow>
-                    <IonCol>
+                    <IonCol size={3}>
                         <IonTitle>
                             {ds.id}
                         </IonTitle>
@@ -101,10 +101,10 @@ const renderText = () => {
                 {ds.document?.cv.map(
             (v, n2) => <IonRow key={`${n}-${n2}`}>
 
-                        <IonCol>
+                        <IonCol size={3}>
                             {`${sLO(v.scopeLabels)["chapter"]}:${sLO(v.scopeLabels)["verses"]}`}
                         </IonCol>
-                        <IonCol>
+                        <IonCol size={6}>
                             {v.text}
                         </IonCol>
                     </IonRow>
@@ -128,7 +128,7 @@ const renderText = () => {
             <IonContent>
                 <IonGrid>
                     <IonRow>
-                        <IonCol>
+                        <IonCol size={3}>
                             <IonInput
                                 value={reference}
                                 onIonChange={e => setReference(e.target.value)}
@@ -136,8 +136,9 @@ const renderText = () => {
                                 style={{color: parseResult.parsed && parseResult.startVerse ? '#0C0' : '#C00'}}
                             />
                         </IonCol>
-                        <IonCol>
-                            <IonToggle onIonChange={e => toggleAllDocSets(e.detail.checked)}></IonToggle>
+                        <IonCol size={9}>
+                            <IonLabel position="relative">Show all languages:</IonLabel>
+                            <IonToggle onIonChange={() => toggleAllDocSets(allDocSets)}></IonToggle>
                         </IonCol>
                     </IonRow>
                     {renderText()}
