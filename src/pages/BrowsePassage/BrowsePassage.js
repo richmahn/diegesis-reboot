@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {useQuery} from "proskomma-react-hooks";
 import PropTypes from "prop-types";
-import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonInput} from '@ionic/react';
+import {IonCol, IonContent, IonGrid, IonPage, IonRow, IonInput, IonTitle, IonToggle, IonLabel} from '@ionic/react';
 import PageHeader from "../../components/PageHeader";
 import parseReferenceString from "./parseReferenceString";
 
@@ -9,9 +9,10 @@ import "./BrowsePassage.css";
 
 export default function BrowsePassage({pkState, navState, setNavState, catalog}) {
 
-    const [reference, setReference] = useState('');
-    const [parsedReference, setParsedReference] = useState('');
+    const [reference, setReference] = useState('3JN 1:1-3');
+    const [parsedReference, setParsedReference] = useState('3JN 1:1-3');
     const [parseResult, setParseResult] = useState({});
+    const [allDocSets, setAllDocSets] = useState(false);
 
     const verbose=true;
 
@@ -38,8 +39,9 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
     const queryState = useQuery({
         ...pkState,
         query: `{
-  docSet(id:"${navState.docSetId}") {
-    document(bookCode:"${parsedReference.split(/\s+/)[0]}") {
+    docSets { 
+      id
+      document(bookCode:"${parsedReference.split(/\s+/)[0]}") {
       bookCode: header(id: "bookCode")
       cv(chapterVerses:"${parsedReference.split(/\s+/)[1]}") {
         scopeLabels(startsWith:["chapter", "verses"])
@@ -50,23 +52,18 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
 }`,
         verbose,
     });
+    const selectedDocSets = queryState.data.docSets?.filter((ds) => allDocSets || ds.id === navState.docSetId);
 
-    /*
-    const {
-        // stateId: passageStateId,
-        query,
-        passages,
-        data,
-        // errors: passageErrors,
-        // reference: passageReference,
-    } = usePassage({
-        proskomma: pkState.proskomma,
-        stateId: pkState.stateId,
-        reference: parsedReference,
-        verbose,
-    });
-*/
-const renderText = (d) => {
+    const toggleAllDocSets = (p) => {
+        if (p === false) {
+           setAllDocSets(true);
+        } else {
+           setAllDocSets(false);
+       }
+    };
+
+const renderText = () => {
+
     if (reference === '') {
         return <IonRow>
                 <IonCol>
@@ -79,31 +76,47 @@ const renderText = (d) => {
                     Wrong format!
                 </IonCol>
             </IonRow>;
-    } else if (d.docSet?.document === null) {
+    } else if (selectedDocSets?.filter(ds => ds.document).length === 0) {
         return <IonRow>
                 <IonCol>
                     Book not found!
                 </IonCol>
             </IonRow>;
-    }  else if (!d.docSet?.document.cv[0]) {
+    }  else if (selectedDocSets?.filter(ds => ds.document?.cv.length > 0).length === 0) {
         return <IonRow>
                 <IonCol>
                     Verse not found!
                 </IonCol>
             </IonRow>;
-    }   else { return queryState.data.docSet?.document?.cv.map((v, n) => <IonRow key={n}>
-                        <IonCol>
-                            {`${queryState.data.docSet?.document?.bookCode} ${sLO(v.scopeLabels)["chapter"]}:${sLO(v.scopeLabels)["verses"]}`}
+    }   else { return selectedDocSets?.filter(ds => ds.document).map(
+        (ds, n) => {
+            return <div key={n}>
+                <IonRow>
+                    <IonCol size={3}>
+                        <IonTitle>
+                            {ds.id}
+                        </IonTitle>
+                    </IonCol>
+                </IonRow>
+                {ds.document?.cv.map(
+            (v, n2) => <IonRow key={`${n}-${n2}`}>
+
+                        <IonCol size={3}>
+                            {`${sLO(v.scopeLabels)["chapter"]}:${sLO(v.scopeLabels)["verses"]}`}
                         </IonCol>
-                        <IonCol>
+                        <IonCol size={6}>
                             {v.text}
                         </IonCol>
-                    </IonRow>)
+                    </IonRow>
+                    )
+                }
+            </div>
+        })
     }
 };
 
 
-    console.log(queryState.data)
+    console.log(queryState)
     return (
         <IonPage>
             <PageHeader
@@ -115,7 +128,7 @@ const renderText = (d) => {
             <IonContent>
                 <IonGrid>
                     <IonRow>
-                        <IonCol>
+                        <IonCol size={3}>
                             <IonInput
                                 value={reference}
                                 onIonChange={e => setReference(e.target.value)}
@@ -123,8 +136,12 @@ const renderText = (d) => {
                                 style={{color: parseResult.parsed && parseResult.startVerse ? '#0C0' : '#C00'}}
                             />
                         </IonCol>
+                        <IonCol size={9}>
+                            <IonLabel position="relative">Show all languages:</IonLabel>
+                            <IonToggle onIonChange={() => toggleAllDocSets(allDocSets)}></IonToggle>
+                        </IonCol>
                     </IonRow>
-                    {renderText(queryState.data)}
+                    {renderText()}
                 </IonGrid>
             </IonContent>
         </IonPage>
