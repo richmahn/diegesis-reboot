@@ -3,23 +3,48 @@ import PropTypes from "prop-types";
 import {IonAccordion, IonAccordionGroup, IonCol, IonContent, IonGrid, IonPage, IonRow, IonItem, IonLabel, IonList, IonTitle, IonText, IonButton} from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import PkErrors from "../../components/PkErrors";
+import { useIonRouter } from "@ionic/react";
+
 import "./Versions.css";
 
 export default function Versions({navState, setNavState, catalog, catalogErrors}) {
 
+    const router = useIonRouter();
+    const chapterClick = (e) => {
+        const element = e?.target;
+        const docSetId = element?.getAttribute("doc");
+        const bookCode = element?.getAttribute("book");
+        const chapter = parseInt(element?.getAttribute("chapter"));
+        setNavState((prevState) => ({ ...prevState, docSetId: docSetId ,bookCode: bookCode, chapter: chapter}));
+        router.push("/browseChapter");
+    };
     const makeAccordion = function (docSet, n) {
-        return  <IonAccordion key ={n} value={docSet.id}>
-                    <IonItem slot="header">
-                        <IonLabel className="accordianLabel">{docSet.id}</IonLabel>
-                    </IonItem>
+        return (
+            <IonAccordion key={n} value={docSet.id}>
+                <IonItem slot="header">
+                    <IonLabel className="accordianLabel">{docSet.id}</IonLabel>
+                </IonItem>
 
-                    <IonList slot="content">
-                        {docSet.documents.map((d, n2) => <IonItem key={n2}><div>
-                            <IonLabel className="bookCodeLabel">{d.bookCode} - {d.toc || d.h || d.toc2 || d.toc3}</IonLabel>
-                            <IonText>{catalog.docSets[n].documents[n2].cvNumbers.map(c1 => c1.chapter).map((c3, n3) => <IonButton key={n3} size="small" color="secondary" fill="outline">{c3}</IonButton>)}</IonText>
-                        </div></IonItem>)}
-                    </IonList>
-                </IonAccordion>
+                <IonList slot="content">
+                    {docSet.documents.map((d, n2) => (
+                        <IonItem key={n2}>
+                            <div>
+                                <IonLabel className="bookCodeLabel">
+                                    {d.bookCode} - {d.toc || d.h || d.toc2 || d.toc3}
+                                </IonLabel>
+                                <IonText>
+                                    {catalog.docSets[n].documents[n2].cvNumbers
+                                        .map((c1) => c1.chapter)
+                                        .map((c3, n3) => (
+                                            <IonButton key={n3} size="small" color="secondary" fill="outline" doc={docSet.id} book={d.bookCode} chapter={c3} onClick={chapterClick} >{c3}</IonButton>
+                                        ))}
+                                </IonText>
+                            </div>
+                        </IonItem>
+                    ))}
+                </IonList>
+            </IonAccordion>
+        );
     }
 
     return (
