@@ -9,7 +9,7 @@ import "./Search.css";
 export default function Search({pkState, navState, setNavState, catalog}) {
 
     const [searchText, setSearchText] = useState('');
-    const [displayMode, setDisplayMode] = useState('verse');
+    const [displayMode, setDisplayMode] = useState(false);
 
     const verbose = true;
 
@@ -31,14 +31,6 @@ export default function Search({pkState, navState, setNavState, catalog}) {
         }
     }
 
-    const toggleSearchDisplayMode = (p) => {
-        if (p === 'block') {
-           setDisplayMode('verse');
-        } else {
-           setDisplayMode('block');
-       }
-    };
-
     const {
         // stateId: searchStateId,
         // bookCodes,
@@ -51,7 +43,7 @@ export default function Search({pkState, navState, setNavState, catalog}) {
         stateId: pkState.stateId,
         text: searchText,
         docSetId: navState.docSetId,
-        blocks: displayMode === 'block',
+        blocks: displayMode,
         tokens: false,
         verbose,
     });
@@ -84,7 +76,7 @@ export default function Search({pkState, navState, setNavState, catalog}) {
                         </IonCol>
                         <IonCol size={8}>
                             <IonLabel position="relative">Show blocks:</IonLabel>
-                            <IonToggle onIonChange={() => toggleSearchDisplayMode(displayMode)}></IonToggle>
+                            <IonToggle onIonChange={() => setDisplayMode(!displayMode)}></IonToggle>
                         </IonCol>
                     </IonRow>
                     {resultRows}
