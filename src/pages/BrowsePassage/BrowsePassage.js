@@ -13,6 +13,7 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
     const [parsedReference, setParsedReference] = useState('3JN 1:1-3');
     const [parseResult, setParseResult] = useState({});
     const [allDocSets, setAllDocSets] = useState(false);
+    const [groupVerses, setGroupVerses] = useState(false);
 
     const verbose=true;
 
@@ -52,71 +53,91 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
 }`,
         verbose,
     });
-    const selectedDocSets = queryState.data.docSets?.filter((ds) => allDocSets || ds.id === navState.docSetId);
+    const selectedDocSets = queryState.data.docSets?.filter((ds) => allDocSets || ds.id === navState.docSetId) || [];
+    const cvArray = selectedDocSets[0]?.document.cv.map(v => v.scopeLabels) || [];
 
-    const toggleAllDocSets = (p) => {
-        if (p === false) {
-           setAllDocSets(true);
-        } else {
-           setAllDocSets(false);
-       }
-    };
+    const renderAllText = (ds, n) => {
+        return <div key={n}>
+            <IonRow>
+                <IonCol size={3}>
+                    <IonTitle>
+                        {ds.id}
+                    </IonTitle>
+                </IonCol>
+            </IonRow>
+            {ds.document?.cv.map(
+        (v, n2) => <IonRow key={`${n}-${n2}`}>
 
-const renderText = () => {
-
-    if (reference === '') {
-        return <IonRow>
-                <IonCol>
-                    Please enter a book reference!
-                </IonCol>
-            </IonRow>;
-    } else if (!parseResult.parsed || !parseResult.startVerse) {
-        return <IonRow>
-                <IonCol>
-                    Wrong format!
-                </IonCol>
-            </IonRow>;
-    } else if (selectedDocSets?.filter(ds => ds.document).length === 0) {
-        return <IonRow>
-                <IonCol>
-                    Book not found!
-                </IonCol>
-            </IonRow>;
-    }  else if (selectedDocSets?.filter(ds => ds.document?.cv.length > 0).length === 0) {
-        return <IonRow>
-                <IonCol>
-                    Verse not found!
-                </IonCol>
-            </IonRow>;
-    }   else { return selectedDocSets?.filter(ds => ds.document).map(
-        (ds, n) => {
-            return <div key={n}>
-                <IonRow>
                     <IonCol size={3}>
-                        <IonTitle>
-                            {ds.id}
-                        </IonTitle>
+                        {`${sLO(v.scopeLabels)["chapter"]}:${sLO(v.scopeLabels)["verses"]}`}
+                    </IonCol>
+                    <IonCol size={6}>
+                        {v.text}
                     </IonCol>
                 </IonRow>
-                {ds.document?.cv.map(
-            (v, n2) => <IonRow key={`${n}-${n2}`}>
+                )
+            }
+        </div>
+    };
 
-                        <IonCol size={3}>
-                            {`${sLO(v.scopeLabels)["chapter"]}:${sLO(v.scopeLabels)["verses"]}`}
-                        </IonCol>
-                        <IonCol size={6}>
-                            {v.text}
-                        </IonCol>
-                    </IonRow>
-                    )
-                }
-            </div>
-        })
+    const renderVerses = (cvA) => {
+        return cvA.map( (cv, n) => <div key={n}>
+            <IonRow>
+                <IonCol>
+                    <IonTitle>{cv[0].split("/")[1]}:{cv[1].split("/")[1]}</IonTitle>
+                </IonCol>
+            </IonRow>
+            {selectedDocSets.map( (ds, n2) => 
+                <IonRow key={n2}>
+                    <IonCol size={2}>
+                        {ds.id}
+                    </IonCol>
+                    <IonCol size={10}>
+                        {ds.document.cv[n].text}
+                    </IonCol>
+                </IonRow>
+            )}
+         </div>
+        )
+    };
+
+    const renderResults = () => {
+
+        if (reference === '') {
+            return <IonRow>
+                    <IonCol>
+                        Please enter a book reference!
+                    </IonCol>
+                </IonRow>;
+        } else if (!parseResult.parsed || !parseResult.startVerse) {
+            return <IonRow>
+                    <IonCol>
+                        Wrong format!
+                    </IonCol>
+                </IonRow>;
+        } else if (selectedDocSets?.filter(ds => ds.document).length === 0) {
+            return <IonRow>
+                    <IonCol>
+                        Book not found!
+                    </IonCol>
+                </IonRow>;
+        }  else if (selectedDocSets?.filter(ds => ds.document?.cv.length > 0).length === 0) {
+            return <IonRow>
+                    <IonCol>
+                        Verse not found!
+                    </IonCol>
+                </IonRow>;
+        }   else { return renderResults1() }
+    };
+
+    const renderResults1 = () => {
+        if (!groupVerses) {
+            return selectedDocSets?.filter(ds => ds.document).map(renderAllText);
+        } else {
+            return renderVerses(cvArray);
+        }
     }
-};
 
-
-    console.log(queryState)
     return (
         <IonPage>
             <PageHeader
@@ -128,7 +149,7 @@ const renderText = () => {
             <IonContent>
                 <IonGrid>
                     <IonRow>
-                        <IonCol size={3}>
+                        <IonCol size={2}>
                             <IonInput
                                 value={reference}
                                 onIonChange={e => setReference(e.target.value)}
@@ -136,12 +157,16 @@ const renderText = () => {
                                 style={{color: parseResult.parsed && parseResult.startVerse ? '#0C0' : '#C00'}}
                             />
                         </IonCol>
-                        <IonCol size={9}>
+                        <IonCol size={5}>
                             <IonLabel position="relative">Show all languages:</IonLabel>
-                            <IonToggle onIonChange={() => toggleAllDocSets(allDocSets)}></IonToggle>
+                            <IonToggle onIonChange={() => setAllDocSets(!allDocSets)}></IonToggle>
+                        </IonCol>
+                        <IonCol size={5}>
+                            <IonLabel position="relative">Group by verse:</IonLabel>
+                            <IonToggle onIonChange={() => setGroupVerses(!groupVerses)}></IonToggle>
                         </IonCol>
                     </IonRow>
-                    {renderText()}
+                    {renderResults()}
                 </IonGrid>
             </IonContent>
         </IonPage>
