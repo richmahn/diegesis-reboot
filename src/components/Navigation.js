@@ -6,20 +6,21 @@ import BookDropDown from "./BookDropDown";
 import ChapterDropDown from "./ChapterDropDown";
 import VerseDropDown from "./VerseDropDown";
 
-const Navigation = ({ navState, setNavState, catalog }) => {
+const Navigation = ({ navState, setNavState, catalog, columns}) => {
+    const { hideBookNav, hideChapterNav, hideVerseNav } = columns;
     return (
         <>
             <IonCol size={3}>
                 <BibleDropDown navState={navState} setNavState={setNavState} catalog={catalog} />
             </IonCol>
             <IonCol size={3}>
-                <BookDropDown navState={navState} setNavState={setNavState} catalog={catalog} />
+                {hideBookNav || <BookDropDown navState={navState} setNavState={setNavState} catalog={catalog} />}
             </IonCol>
             <IonCol size={3}>
-                <ChapterDropDown navState={navState} setNavState={setNavState} catalog={catalog} />
+                {hideChapterNav || <ChapterDropDown navState={navState} setNavState={setNavState} catalog={catalog} />}
             </IonCol>
             <IonCol size={3}>
-                <VerseDropDown navState={navState} setNavState={setNavState} catalog={catalog} />
+                {hideVerseNav || <VerseDropDown navState={navState} setNavState={setNavState} catalog={catalog} />}
             </IonCol>
         </>
     );
@@ -31,4 +32,5 @@ Navigation.propTypes = {
     navState: PropTypes.object.isRequired,
     setNavState: PropTypes.func.isRequired,
     catalog: PropTypes.object.isRequired,
+    columns: PropTypes.object.isRequired,
 };
