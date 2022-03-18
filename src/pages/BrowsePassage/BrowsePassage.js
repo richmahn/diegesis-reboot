@@ -15,7 +15,7 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
     const [allDocSets, setAllDocSets] = useState(false);
     const [groupVerses, setGroupVerses] = useState(false);
 
-    const verbose=true;
+    const verbose = true;
 
     const sLO = (sL) => {
         const ret = {};
@@ -33,7 +33,7 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
             if (pr.parsed) {
                 setParsedReference(pr.original);
             }
-        } ,
+        },
         [reference]
     );
 
@@ -59,45 +59,45 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
     const renderAllText = (ds, n) => {
         return <div key={n}>
             <IonRow>
-                <IonCol size={3}>
+                <IonCol>
                     <IonTitle>
                         {ds.id}
                     </IonTitle>
                 </IonCol>
             </IonRow>
             {ds.document?.cv.map(
-        (v, n2) => <IonRow key={`${n}-${n2}`}>
+                (v, n2) => <IonRow key={`${n}-${n2}`}>
 
-                    <IonCol size={3}>
+                    <IonCol size={2}>
                         {`${sLO(v.scopeLabels)["chapter"]}:${sLO(v.scopeLabels)["verses"]}`}
                     </IonCol>
-                    <IonCol size={6}>
+                    <IonCol size={10}>
                         {v.text}
                     </IonCol>
                 </IonRow>
-                )
+            )
             }
         </div>
     };
 
     const renderVerses = (cvA) => {
-        return cvA.map( (cv, n) => <div key={n}>
-            <IonRow>
-                <IonCol>
-                    <IonTitle>{cv[0].split("/")[1]}:{cv[1].split("/")[1]}</IonTitle>
-                </IonCol>
-            </IonRow>
-            {selectedDocSets.map( (ds, n2) => 
-                <IonRow key={n2}>
-                    <IonCol size={2}>
-                        {ds.id}
-                    </IonCol>
-                    <IonCol size={10}>
-                        {ds.document.cv[n].text}
+        return cvA.map((cv, n) => <div key={n}>
+                <IonRow>
+                    <IonCol>
+                        <IonTitle>{cv[0].split("/")[1]}:{cv[1].split("/")[1]}</IonTitle>
                     </IonCol>
                 </IonRow>
-            )}
-         </div>
+                {selectedDocSets.map((ds, n2) =>
+                    <IonRow key={n2}>
+                        <IonCol size={2}>
+                            {ds.id}
+                        </IonCol>
+                        <IonCol size={10}>
+                            {ds.document.cv[n].text}
+                        </IonCol>
+                    </IonRow>
+                )}
+            </div>
         )
     };
 
@@ -105,29 +105,31 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
 
         if (reference === '') {
             return <IonRow>
-                    <IonCol>
-                        Please enter a book reference!
-                    </IonCol>
-                </IonRow>;
+                <IonCol>
+                    Please enter a book reference!
+                </IonCol>
+            </IonRow>;
         } else if (!parseResult.parsed || !parseResult.startVerse) {
             return <IonRow>
-                    <IonCol>
-                        Wrong format!
-                    </IonCol>
-                </IonRow>;
+                <IonCol>
+                    Wrong format!
+                </IonCol>
+            </IonRow>;
         } else if (selectedDocSets?.filter(ds => ds.document).length === 0) {
             return <IonRow>
-                    <IonCol>
-                        Book not found!
-                    </IonCol>
-                </IonRow>;
-        }  else if (selectedDocSets?.filter(ds => ds.document?.cv.length > 0).length === 0) {
+                <IonCol>
+                    Book not found!
+                </IonCol>
+            </IonRow>;
+        } else if (selectedDocSets?.filter(ds => ds.document?.cv.length > 0).length === 0) {
             return <IonRow>
-                    <IonCol>
-                        Verse not found!
-                    </IonCol>
-                </IonRow>;
-        }   else { return renderResults1() }
+                <IonCol>
+                    Verse not found!
+                </IonCol>
+            </IonRow>;
+        } else {
+            return renderResults1()
+        }
     };
 
     const renderResults1 = () => {
@@ -159,11 +161,11 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
                         </IonCol>
                         <IonCol size={5}>
                             <IonLabel position="relative">Show all languages:</IonLabel>
-                            <IonToggle onIonChange={() => setAllDocSets(!allDocSets)}></IonToggle>
+                            <IonToggle onIonChange={() => setAllDocSets(!allDocSets)} />
                         </IonCol>
                         <IonCol size={5}>
                             <IonLabel position="relative">Group by verse:</IonLabel>
-                            <IonToggle onIonChange={() => setGroupVerses(!groupVerses)}></IonToggle>
+                            <IonToggle onIonChange={() => setGroupVerses(!groupVerses)} />
                         </IonCol>
                     </IonRow>
                     {renderResults()}
