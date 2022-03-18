@@ -1,3 +1,4 @@
-.accordianLabel { color:brown; font-weight: bold; font-size: larger; }
+.accordianLabel { color:brown; font-weight: bold;  }
 .bookCodeLabel {font-weight: bold;}
 .secondaryLabel {padding-left: 2em; font-style: italic;}
+ion-accordion.accordion-expanded ion-item[slot="header"] {--background: #efefef;}
