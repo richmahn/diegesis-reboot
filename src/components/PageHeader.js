@@ -5,14 +5,7 @@ import Navigation from './Navigation';
 import { useIonRouter } from "@ionic/react";
 
 export default function PageHeader({ title, navState, setNavState, catalog, columns }) {
-    // To do 1. Add drop down selector for Bible Done
-    // 2. Add drop down selector Book dropdown - Done
-    // 3. Add drop down selector Chapter dropdown - Done
-    // 4. Add drop down selector verse dropdown - Doen
-    // 5. Use navState to show current value - Done
-    // 6. Use setNavState to set new value on change - Done
-    // 7. Add Next, previous buttons as per the tab ie next chapter /previous chapter on chapters tab
-    // 8. Hide Book, chapter, verse dropdown as per tab - Done
+    // To do: Add Next, previous buttons as per the tab ie next chapter /previous chapter on chapters tab
 
     const router = useIonRouter();
 
