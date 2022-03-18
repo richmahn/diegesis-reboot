@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
-import {IonPage, IonContent, IonGrid, IonRow, IonCol, IonInput, IonLabel, IonButton } from "@ionic/react";
+import {IonPage, IonContent, IonGrid, IonRow, IonCol, IonInput, IonLabel, IonToggle } from "@ionic/react";
 import PageHeader from "../../components/PageHeader";
 import { useSearchForPassages } from "proskomma-react-hooks";
 
@@ -83,13 +83,8 @@ export default function Search({pkState, navState, setNavState, catalog}) {
                             />
                         </IonCol>
                         <IonCol size={8}>
-                            <IonButton
-                                size='small'
-                                value={displayMode}
-                                onClick={(e) => toggleSearchDisplayMode(e.target.value)}
-                            >
-                                Displaying {displayMode}s
-                            </IonButton>
+                            <IonLabel position="relative">Show blocks:</IonLabel>
+                            <IonToggle onIonChange={() => toggleSearchDisplayMode(displayMode)}></IonToggle>
                         </IonCol>
                     </IonRow>
                     {resultRows}
