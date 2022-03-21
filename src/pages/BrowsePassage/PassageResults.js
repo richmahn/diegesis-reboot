@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import {IonCol, IonRow} from '@ionic/react';
 import PassageByVersions from "./PassageByVersions";
 import PassageByVerse from "./PassageByVerse";
+import PassageByVersion from "./PassageByVersion";
 
-export default function PassageResults({reference, parseResult, docSets, groupVerses}) {
+export default function PassageResults({reference, parseResult, docSets, displayFlags}) {
     const cvArray = docSets[0]?.document.cv.map(v => v.scopeLabels) || [];
 
     if (reference === '') {
@@ -31,17 +32,18 @@ export default function PassageResults({reference, parseResult, docSets, groupVe
                 Verse not found!
             </IonCol>
         </IonRow>;
-    } else if (groupVerses){
+    } else if (displayFlags.groupVerses){
         return <PassageByVerse cvArray={cvArray} docSets={docSets} />;
+    } else if (docSets.length === 1){
+        return docSets.map((ds, n) => <PassageByVersion key={n} docSet={ds} keyPrefix={n} />);
     } else {
         return <PassageByVersions docSets={docSets} />;
     }
-
 }
 
 PassageResults.propTypes = {
     reference: PropTypes.string.isRequired,
     parseResult: PropTypes.object.isRequired,
     docSets: PropTypes.array.isRequired,
-    groupVerses: PropTypes.bool.isRequired,
+    displayFlags: PropTypes.object.isRequired,
 };
