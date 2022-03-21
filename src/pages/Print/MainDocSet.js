@@ -1,8 +1,7 @@
-const { ScriptureDocSet } = require('proskomma-render');
-
-const MainDocument = require('./CanonicalDocument');
-const PeripheralDocument = require('./PeripheralDocument');
-const {startHTMLTemplate, endHTMLTemplate, tocHTMLTemplate, titleHTMLTemplate} = require('./htmlResources');
+import { ScriptureDocSet } from 'proskomma-render';
+import MainDocument from './CanonicalDocument';
+import PeripheralDocument from './PeripheralDocument';
+import {startHTMLTemplate, endHTMLTemplate, tocHTMLTemplate, titleHTMLTemplate} from './htmlResources';
 
 export default class MainDocSet extends ScriptureDocSet {
 
