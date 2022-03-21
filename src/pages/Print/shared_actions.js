@@ -1,4 +1,4 @@
-export default ({
+export default {
     // Character markup - open or close an element
     characterScope: [
         'scope',
@@ -66,4 +66,4 @@ export default ({
             return renderer.appendToTopStackRow(tokenString);
         }
     ],
-});
+};
