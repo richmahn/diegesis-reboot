@@ -1,5 +1,5 @@
-const { ScriptureParaDocument } = require('proskomma-render');
-const sharedActions = require('./shared_actions');
+import { ScriptureParaDocument } from 'proskomma-render';
+import sharedActions from './shared_actions';
 
 export default class PeripheralDocument extends ScriptureParaDocument {
 
