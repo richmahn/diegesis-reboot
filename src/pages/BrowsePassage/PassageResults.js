@@ -7,7 +7,7 @@ import PassageByVersion from "./PassageByVersion";
 import PkDataAsJson from "../../components/PkDataAsJson";
 
 export default function PassageResults({reference, parseResult, docSets, displayFlags}) {
-    const cvArray = docSets[0]?.document.cv.map(v => v.scopeLabels) || [];
+    const cvArray = docSets[0]?.document?.cv.map(v => v.scopeLabels) || [];
 
     if (reference === '') {
         return <IonRow>

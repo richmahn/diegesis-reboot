@@ -58,10 +58,11 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
         query: query,
         verbose,
     });
-    const selectedDocSets = queryState.data.docSets?.filter((ds) => displayFlags[displayMode].allDocSets || ds.id === navState.docSetId) || [];
+    const selectedDocSets = queryState.data.docSets?.filter((ds) => displayFlags[displayMode]?.allDocSets || ds.id === navState.docSetId) || [];
 
-    console.log(query)
-    console.log(queryState.data.docSets?.filter((ds) => displayFlags[displayMode].allDocSets || ds.id === navState.docSetId)[0]?.document.mainSequence.blocks.map(b => b.text))
+    console.log('display mode', displayMode)
+    // console.log(query)
+    // console.log(queryState.data.docSets?.filter((ds) => displayFlags[displayMode].allDocSets || ds.id === navState.docSetId)[0]?.document.mainSequence.blocks.map(b => b.text))
     return (
         <IonPage>
             <PageHeader
@@ -71,17 +72,19 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
                 catalog={catalog}
             />
             <IonContent>
-                <IonRadioGroup value={displayMode} onIonChange={e => setDisplayMode(e.detail.value)}>
-                    <IonGrid>
+                <IonGrid>
+                    <IonRow>
+                        <IonCol size={12}>
+                            <IonInput
+                                value={reference}
+                                onIonChange={e => setReference(e.target.value)}
+                                debounce={500}
+                                style={{color: parseResult.parsed && parseResult.startVerse ? '#0C0' : '#C00'}}
+                            />
+                        </IonCol>
+                    </IonRow>
+                    <IonRadioGroup value={displayMode} onIonChange={e => setDisplayMode(e.detail.value)}>
                         <IonRow>
-                            <IonCol size={2}>
-                                <IonInput
-                                    value={reference}
-                                    onIonChange={e => setReference(e.target.value)}
-                                    debounce={500}
-                                    style={{color: parseResult.parsed && parseResult.startVerse ? '#0C0' : '#C00'}}
-                                />
-                            </IonCol>
                             <IonCol size={2}>
                                 <IonLabel>One Version</IonLabel>
                                 <IonRadio value="versesForOneVersion" />
@@ -91,26 +94,26 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
                                 <IonRadio value="versesByVersion" />
                             </IonCol>
                             <IonCol size={2}>
-                               <IonLabel>By Verse</IonLabel>
-                               <IonRadio value="versesByVerse" />
-                           </IonCol>
-                           <IonCol size={2}>
-                               <IonLabel>Blocks For One Version</IonLabel>
-                               <IonRadio value="blocksForOneVersion" />
-                           </IonCol>
-                           <IonCol size={2}>
-                               <IonLabel>Blocks By Version</IonLabel>
-                               <IonRadio value="blocksByVersion" />
-                           </IonCol>
+                                <IonLabel>By Verse</IonLabel>
+                                <IonRadio value="versesByVerse" />
+                            </IonCol>
+                            <IonCol size={2}>
+                                <IonLabel>Blocks For One Version</IonLabel>
+                                <IonRadio value="blocksForOneVersion" />
+                            </IonCol>
+                            <IonCol size={2}>
+                                <IonLabel>Blocks By Version</IonLabel>
+                                <IonRadio value="blocksByVersion" />
+                            </IonCol>
                         </IonRow>
-                        <PassageResults 
-                            reference={reference} 
-                            parseResult={parseResult} 
-                            docSets={selectedDocSets} 
-                            displayFlags={displayFlags[displayMode]} 
-                        />
-                    </IonGrid>
-                </IonRadioGroup>
+                    </IonRadioGroup>
+                    <PassageResults
+                        reference={reference}
+                        parseResult={parseResult}
+                        docSets={selectedDocSets}
+                        displayFlags={displayFlags[displayMode]}
+                    />
+                </IonGrid>
             </IonContent>
         </IonPage>
     );
