@@ -41,9 +41,8 @@ PassageByVersion.propTypes = {
 };
 
 export default function PassageByVersions({docSets}) {
-   // return docSets?.filter(ds => ds.document).map((ds, n) => <PassageByVersion key={n} docSet={ds} keyPrefix={n} />);
-    return docSets?.filter(ds => ds.document).map((ds, n) => <p key={n}>hola</p>);
-};
+   return docSets?.filter(ds => ds.document).map((ds, n) => <PassageByVersion key={n} docSet={ds} keyPrefix={n} />);
+}
 
 PassageByVersions.propTypes = {
     docSets: PropTypes.array.isRequired,
