@@ -20,7 +20,7 @@ import BrowseVerse from './pages/BrowseVerse/BrowseVerse';
 import BrowsePassage from './pages/BrowsePassage/BrowsePassage';
 import Search from './pages/Search/Search';
 import Print from './pages/Print/Print';
-import { nt_ebible_27book as frozen } from 'proskomma-frozen-archives';
+import { nt_uw_1book as frozen } from 'proskomma-frozen-archives';
 import { useCatalog } from 'proskomma-react-hooks';
 import { thaw } from 'proskomma-freeze';
 
