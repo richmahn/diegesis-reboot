@@ -111,7 +111,10 @@ export default function BrowsePassage({pkState, navState, setNavState, catalog})
                         reference={reference}
                         parseResult={parseResult}
                         docSets={selectedDocSets}
-                        displayFlags={displayFlags[displayMode]}
+                        displayFlags={displayFlags} 
+                        displayMode={displayMode} 
+                        navState={navState} 
+                        allDocSets={displayFlags[displayMode].allDocSets}
                     />
                 </IonGrid>
             </IonContent>
