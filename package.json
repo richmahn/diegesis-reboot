@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@capacitor/android": "3.4.3",
     "@capacitor/app": "1.1.0",
     "@capacitor/core": "3.4.1",
     "@capacitor/haptics": "1.1.4",
@@ -23,6 +24,7 @@
     "proskomma-frozen-archives": "0.0.3",
     "proskomma-react-hooks": "^1.11.1",
     "proskomma-render": "^0.6.0",
+    "proskomma-render-pdf": "^0.6.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-json-view": "^1.21.3",

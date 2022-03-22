@@ -2,11 +2,18 @@
 ## Rebuilding the Diegesis App using Ionic 6 and Unfolding Word Proskomma Hooks
 
 ```
-npm install -g @ionic/cli
+npm install -g @ionic/cli // If you want ionic tools
 npm install
-ionic serve
+ionic serve // or
+npm start
 ```
 
-You will need [The Diegesis User Data Server](https://github.com/Proskomma/diegesis-userdata).
+## Building for Android (experimental)
 
-You will also need to drop a UWProskomma frozen state archive into `static/archives`.
+```
+ionic capacitor copy android
+emulator -avd Nexus_6_API_29 // Or some other virtual device
+cd android
+./gradlew assembleDebug
+adb install app/build/outputs/apk/debug/app-debug.apk
+```
