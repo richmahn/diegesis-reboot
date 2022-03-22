@@ -36,12 +36,14 @@ export default function PassageResults({reference, parseResult, docSets, display
     } else if (displayFlags.byBlock) {
         return <PkDataAsJson data={docSets} />
     } else {    // by Verse
-        if (displayFlags.groupVerses){
-            return <PassageByVerse cvArray={cvArray} docSets={docSets} />;
-        } else if (docSets.length === 1){
-            return docSets.map((ds, n) => <PassageByVersion key={n} docSet={ds} keyPrefix={n} />);
-        } else {
+         if (!displayFlags.allDocSets && !displayFlags.groupVerses){
+            return docSets.map((ds, n) => <PassageByVersion docSet={ds} keyPrefix={n} key={n} />);
+        } else if (displayFlags.allDocSets && !displayFlags.groupVerses) {
             return <PassageByVersions docSets={docSets} />;
+        } else if(displayFlags.allDocSets && displayFlags.groupVerses){
+            return <PassageByVerse cvArray={cvArray} docSets={docSets} />;
+        } else {
+            return null;
         }
     }
 }

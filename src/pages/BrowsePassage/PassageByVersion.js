@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {IonCol, IonRow, IonTitle} from '@ionic/react';
+import {IonCol, IonRow} from '@ionic/react';
 
 export default function PassageByVersion({docSet, keyPrefix}) {
     const sLO = (sL) => {
@@ -13,13 +13,7 @@ export default function PassageByVersion({docSet, keyPrefix}) {
     };
 
     return <div key={keyPrefix}>
-        <IonRow>
-            <IonCol>
-                <IonTitle>
-                    {docSet.id}
-                </IonTitle>
-            </IonCol>
-        </IonRow>
+        
         {docSet.document?.cv.map(
             (v, n2) => <IonRow key={`${keyPrefix}-${n2}`}>
 
