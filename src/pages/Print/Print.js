@@ -13,14 +13,12 @@ import {
     IonInput,
     IonButton,
 } from "@ionic/react";
+import {doRender} from 'proskomma-render-pdf';
 import PageHeader from "../../components/PageHeader";
-import {ScriptureParaModel, ScriptureParaModelQuery} from "proskomma-render";
-import MainDocSet from './MainDocSet';
 import "./Print.css";
-import {pagedJSStyle} from "./htmlResources";
+// import {pagedJSStyle} from "./htmlResources";
 
 export default function Print({pkState, navState, setNavState, catalog}) {
-    const [queryJson, setQueryJson] = useState(null);
     const [bibleName, setBibleName] = useState(navState.docSetId);
     const [userTypedBibleName, setUserTypedBibleName] = useState(false);
     const [bibleBooks, setBibleBooks] = useState([]);
@@ -35,17 +33,15 @@ export default function Print({pkState, navState, setNavState, catalog}) {
     useEffect(() => {
         const doQuery = async () => {
             setBibleName(navState.docSetId);
-            const query = await ScriptureParaModelQuery(pkState.proskomma, [navState.docSetId])
-            setQueryJson(query);
             setBibleBookOptions(
-                query.docSets[0].documents
+                catalog.docSets.filter(ds => ds.id === navState.docSetId)[0].documents
                     .map(
                         doc => <IonSelectOption
                             key={doc.id}
-                            value={doc.idParts.parts[0]}
-                            selected={bibleBooks.includes(doc.idParts.parts[0])}
+                            value={doc.bookCode}
+                            selected={bibleBooks.includes(doc.bookCode)}
                         >
-                            <IonLabel>{doc.idParts.parts[0]}</IonLabel>
+                            <IonLabel>{doc.bookCode}</IonLabel>
                         </IonSelectOption>
                     )
             );
@@ -57,7 +53,7 @@ export default function Print({pkState, navState, setNavState, catalog}) {
 
     useEffect(
         () => {
-            const doRender = async () => {
+            const doLocalRender = async () => {
                 const config = {
                     "bookOutput": {},
                     "title": bibleName,
@@ -85,25 +81,26 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                         "canonical": "Books of the Bible"
                     }
                 };
-                const model = new ScriptureParaModel(queryJson, config);
-                model.addDocSetModel('default', new MainDocSet(queryJson, model.context, config));
-                model.render();
+                console.log("Start Render Query")
+                const config2 = await doRender(pkState.proskomma, config);
+                return config2;
+            }
+            doLocalRender().then(config2 => {
+                console.log(config2.output);
                 const newPage = window.open();
-                const htmlBody = config.output.replace(/^[\s\S]*<body>/,"").replace(/<\/body>[\s\S]*/, "");
-                newPage.document.body.innerHTML = htmlBody;
-                newPage.document.head.innerHTML = "<title>PDF Preview</title>";
-                const script = document.createElement('script');
-                script.src = 'https://unpkg.com/pagedjs/dist/paged.polyfill.js';
-                newPage.document.head.appendChild(script);
-                const style = document.createElement('style');
-                style.innerHTML=pagedJSStyle;
-                newPage.document.head.appendChild(style);
-            }
-            if (queryJson && bibleBooks.length > 0 && bibleName) {
-                doRender().then();
-            }
+                console.log('newPage', newPage);
+                // newPage.document.body.innerHTML = config2.output.replace(/^[\s\S]*<body>/, "").replace(/<\/body>[\s\S]*/, "");
+                // newPage.document.head.innerHTML = "<title>PDF Preview</title>";
+                // const script = document.createElement('script');
+                // script.src = 'https://unpkg.com/pagedjs/dist/paged.polyfill.js';
+                // newPage.document.head.appendChild(script);
+                // const style = document.createElement('style');
+                // style.innerHTML = pagedJSStyle;
+                // newPage.document.head.appendChild(style);
+
+            })
         },
-        [queryJson, bibleName, bibleBooks]
+        [bibleName, bibleBooks]
     );
 
     return (
@@ -156,7 +153,7 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                                 size="small"
                                 onClick={
                                     () => {
-                                        setBibleBooks(queryJson.docSets[0].documents.map(d => d.idParts.parts[0]));
+                                        setBibleBooks(catalog.docSets.filter(ds => ds.id === navState.docSetId)[0].documents.map(doc => doc.bookCode));
                                     }
                                 }
                                 disabled={bibleBookOptions.length === 0}
