@@ -16,7 +16,7 @@ import {
 import {doRender} from 'proskomma-render-pdf';
 import PageHeader from "../../components/PageHeader";
 import "./Print.css";
-// import {pagedJSStyle} from "./htmlResources";
+import {pagedJSStyle} from "./htmlResources";
 
 export default function Print({pkState, navState, setNavState, catalog}) {
     const [bibleName, setBibleName] = useState(navState.docSetId);
@@ -82,23 +82,34 @@ export default function Print({pkState, navState, setNavState, catalog}) {
                     }
                 };
                 console.log("Start Render Query")
-                const config2 = await doRender(pkState.proskomma, config);
+                const newPage = window.open();
+                newPage.document.head.innerHTML = "<title>PDF Preview</title>";
+                config.newPage = newPage;
+                const config2 = await doRender(
+                    pkState.proskomma,
+                    config,
+                    [navState.docSetId],
+                    catalog.docSets
+                        .filter(ds => ds.id === navState.docSetId)[0]
+                        .documents
+                        .filter(d => bibleBooks.includes(d.bookCode))
+                        .map(d => d.id)
+                );
                 return config2;
             }
-            doLocalRender().then(config2 => {
-                console.log(config2.output);
-                const newPage = window.open();
-                console.log('newPage', newPage);
-                // newPage.document.body.innerHTML = config2.output.replace(/^[\s\S]*<body>/, "").replace(/<\/body>[\s\S]*/, "");
-                // newPage.document.head.innerHTML = "<title>PDF Preview</title>";
-                // const script = document.createElement('script');
-                // script.src = 'https://unpkg.com/pagedjs/dist/paged.polyfill.js';
-                // newPage.document.head.appendChild(script);
-                // const style = document.createElement('style');
-                // style.innerHTML = pagedJSStyle;
-                // newPage.document.head.appendChild(style);
-
-            })
+            if (bibleBooks.length > 0) {
+                doLocalRender()
+                    .then(config2 => {
+                            config2.newPage.document.body.innerHTML = config2.output.replace(/^[\s\S]*<body>/, "").replace(/<\/body>[\s\S]*/, "");
+                            const script = document.createElement('script');
+                            script.src = 'https://unpkg.com/pagedjs/dist/paged.polyfill.js';
+                            config2.newPage.document.head.appendChild(script);
+                            const style = document.createElement('style');
+                            style.innerHTML = pagedJSStyle;
+                            config2.newPage.document.head.appendChild(style);
+                        }
+                    )
+            }
         },
         [bibleName, bibleBooks]
     );
