@@ -6,16 +6,13 @@ import PassageByVersion from "./PassageByVersion";
 export default function PassageByVersions({docSets}) {
 
     return docSets?.map(
-            (ds, n) => {
-                <div key={n}>
-                    <IonRow>
+            (ds, n) => <div key={n}><IonRow>
                         <IonCol>
-                            <IonTitle>{ds.id}</IonTitle>
+                            <IonTitle>Foo {ds.id}</IonTitle>
                         </IonCol>
                     </IonRow>
                     <PassageByVersion key={n} docSet={ds} />
-                </div>
-            }
+            </div>
         );
 }
 

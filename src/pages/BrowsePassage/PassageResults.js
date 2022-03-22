@@ -37,10 +37,13 @@ export default function PassageResults({reference, parseResult, docSets, display
         return <PkDataAsJson data={docSets} />
     } else {    // by Verse
          if (!displayFlags.allDocSets && !displayFlags.groupVerses){
+             console.log('PassageByVersion');
             return docSets.map((ds, n) => <PassageByVersion docSet={ds} keyPrefix={n} key={n} />);
         } else if (displayFlags.allDocSets && !displayFlags.groupVerses) {
+             console.log('PassageByVersions');
             return <PassageByVersions docSets={docSets} />;
         } else if(displayFlags.allDocSets && displayFlags.groupVerses){
+             console.log('PassageByVerse');
             return <PassageByVerse cvArray={cvArray} docSets={docSets} />;
         } else {
             return null;
